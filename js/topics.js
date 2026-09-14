@@ -10,7 +10,7 @@ window.PL330.categories = [
   { id: 'tuning', title: 'Поиск станций' },
   { id: 'memory', title: 'Память (избранное)' },
   { id: 'clock',  title: 'Часы и будильник' },
-  { id: 'extra',  title: 'Дополнительно' },
+  { id: 'extra',  title: 'Дополни\u00ADтельно' },
   { id: 'fun',    title: 'Интересное', special: true },
 ];
 
@@ -63,7 +63,7 @@ window.PL330.topics = [
       <div class="note">Не знаете, какую выбрать? Начните с <b>FM</b> — там проще всего поймать станцию.</div>
       ` },
 
-    { id: 'charge', cat: 'start', icon: '🔌', title: 'Зарядить аккумулятор',
+    { id: 'charge', cat: 'start', icon: '🔌', title: 'Зарядить аккуму\u00ADлятор',
       body: `
       <ol>
         <li>Найдите маленький разъём для кабеля сбоку приёмника (рядом с гнездом для наушников).</li>
@@ -97,7 +97,7 @@ window.PL330.topics = [
       <div class="note">Понравилась станция во время поиска? Сразу нажмите кнопку <span class="key">M</span> — она сохранится в память.</div>
       ` },
 
-    { id: 'etm', cat: 'tuning', icon: '✨', title: 'Умный поиск ETM (самый удобный)',
+    { id: 'etm', cat: 'tuning', icon: '✨', title: 'Умный поиск ETM (самый удоб\u00ADный)',
       body: `
       <p>Это лучший способ — радио само находит <b>и запоминает</b> сразу много станций.</p>
       <ol>
@@ -129,7 +129,7 @@ window.PL330.topics = [
       </ol>
       ` },
 
-    { id: 'recall', cat: 'memory', icon: '📂', title: 'Включить сохранённую станцию',
+    { id: 'recall', cat: 'memory', icon: '📂', title: 'Включить сохра\u00ADнённую станцию',
       body: `
       <ol>
         <li>Коротко нажмите кнопку <span class="key">VF/VM</span> — вверху экрана замигает номер «Preset».</li>
@@ -159,7 +159,7 @@ window.PL330.topics = [
       </ol>
       ` },
 
-    { id: 'alarm', cat: 'clock', icon: '⏰', title: 'Установить будильник',
+    { id: 'alarm', cat: 'clock', icon: '⏰', title: 'Установить будиль\u00ADник',
       body: `
       <ol>
         <li>Нажмите и подержите кнопку <span class="key">ALARM</span> — время будильника замигает.</li>
@@ -170,7 +170,7 @@ window.PL330.topics = [
       <div class="note">Когда будильник зазвонит, нажмите <span class="key">POWER</span> один раз, если хотите послушать радио дальше, или дважды — чтобы всё выключить. Кнопка <span class="key">DISPLAY</span> отложит будильник на 5 минут.</div>
       ` },
 
-    { id: 'sleep', cat: 'clock', icon: '😴', title: 'Автовыключение (таймер сна)',
+    { id: 'sleep', cat: 'clock', icon: '😴', title: 'Автовыклю\u00ADчение (таймер сна)',
       body: `
       <p>Эта функция сама выключит радио через выбранное время — удобно слушать перед сном.</p>
       <ol>
@@ -191,7 +191,7 @@ window.PL330.topics = [
       </ol>
       ` },
 
-    { id: 'lock', cat: 'extra', icon: '🔒', title: 'Заблокировать кнопки',
+    { id: 'lock', cat: 'extra', icon: '🔒', title: 'Заблоки\u00ADровать кнопки',
       body: `
       <p>Полезно, если носите радио в сумке — чтобы кнопки случайно не нажимались.</p>
       <ol>

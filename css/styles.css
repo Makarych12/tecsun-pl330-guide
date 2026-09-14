@@ -43,12 +43,23 @@ body{
 }
 button{font-family:inherit;}
 b,strong{font-weight:800;}
+/* длинные слова («Радиоприёмник», «Заблокировать») переносятся, а не вылезают —
+   важно при крупном системном шрифте на телефоне */
+body{overflow-wrap:anywhere;}
+img,svg,video,picture{max-width:100%;}
+h1,h2,h3{overflow-wrap:anywhere;}
 
 .wrap{
   max-width:640px;
   margin:0 auto;
   padding:18px 18px 72px;
   padding-top:calc(18px + env(safe-area-inset-top));
+}
+@media (max-width:340px){
+  .wrap{padding-left:12px;padding-right:12px;}
+  .detail-body{font-size:1.2rem;}
+  .detail-body ol li{padding-left:52px;}
+  .detail-body ol li::before{width:40px;height:40px;font-size:1.15rem;}
 }
 
 /* Видимый фокус для клавиатуры (Bluetooth-клавиатура/трекпад) */
@@ -73,7 +84,7 @@ b,strong{font-weight:800;}
 }
 .header h1{
   margin:4px 0 6px;
-  font-size:2.4rem;
+  font-size:clamp(1.7rem, 8.5vw, 2.4rem);
   font-weight:800;
   color:var(--amber);
   line-height:1.05;
@@ -181,9 +192,11 @@ b,strong{font-weight:800;}
 }
 .dial-top{
   display:flex;
+  flex-wrap:wrap;
   align-items:baseline;
   justify-content:space-between;
-  gap:12px;
+  gap:4px 12px;
+  min-width:0;
 }
 .dial .band{
   white-space:nowrap;
@@ -193,7 +206,9 @@ b,strong{font-weight:800;}
   letter-spacing:0.08em;
 }
 .dial .freq{
-  font-size:2.1rem;
+  font-size:clamp(1.5rem, 7vw, 2.1rem);
+  white-space:nowrap;
+  margin-left:auto;
   font-weight:700;
   color:var(--amber);
   letter-spacing:0.04em;
@@ -218,10 +233,6 @@ b,strong{font-weight:800;}
   font-weight:600;
   margin-left:6px;
   color:var(--amber-soft);
-}
-@media (max-width:360px){
-  .dial .freq{font-size:1.7rem;}
-  .dial .band{font-size:.95rem;}
 }
 @keyframes glow{
   0%,100%{text-shadow:0 0 8px rgba(255,180,67,0.35);}
@@ -262,11 +273,10 @@ b,strong{font-weight:800;}
 
 .grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  /* столбец не уже 200px: длинные слова помещаются даже при крупном шрифте;
+     на телефоне — один столбец, на планшете — два-три */
+  grid-template-columns:repeat(auto-fill, minmax(min(100%, 200px), 1fr));
   gap:12px;
-}
-@media (max-width:380px){
-  .grid{grid-template-columns:1fr;}
 }
 
 .tile{
@@ -300,7 +310,8 @@ b,strong{font-weight:800;}
 }
 .tile-fun .icon{filter:drop-shadow(0 0 6px rgba(255,180,67,0.5));}
 .tile .icon{font-size:2rem;line-height:1;}
-.tile .label{font-size:1.18rem;font-weight:700;line-height:1.25;}
+.tile .label{font-size:1.18rem;font-weight:700;line-height:1.25;min-width:0;max-width:100%;}
+.tile{min-width:0;max-width:100%;}
 
 /* ---------- Экран темы ---------- */
 .backbtn{
@@ -322,17 +333,19 @@ b,strong{font-weight:800;}
 }
 .backbtn{transition:transform .1s ease, box-shadow .1s ease;}
 .backbtn:active{transform:translateY(2px) scale(0.99);box-shadow:inset 0 3px 8px rgba(0,0,0,0.4);}
-.backbtn .arrow{font-size:1.5rem;line-height:1;}
+.backbtn .arrow{font-size:1.5rem;line-height:1;flex:0 0 auto;}
+.backbtn{text-align:left;}
 .backbtn.bottom{margin-top:26px;margin-bottom:0;}
 
 .detail-icon{font-size:3rem;line-height:1;margin-bottom:8px;}
 .detail-title{
-  font-size:1.9rem;
+  font-size:clamp(1.5rem, 6.5vw, 1.9rem);
   font-weight:800;
   color:var(--amber);
   margin:4px 0 18px;
   line-height:1.15;
 }
+.detail-title:focus-visible{box-shadow:none;}
 .detail-body{
   font-size:1.3rem;
   line-height:1.6;
@@ -349,7 +362,8 @@ b,strong{font-weight:800;}
 .detail-body ol li{
   counter-increment:step;
   position:relative;
-  padding-left:60px;
+  padding-left:58px;
+  min-width:0;
   margin-bottom:18px;
   min-height:46px;
 }
@@ -380,7 +394,8 @@ b,strong{font-weight:800;}
   background:var(--panel);
   border-left:6px solid var(--amber-deep);
   border-radius:10px;
-  padding:14px 16px;
+  padding:14px 14px;
+  min-width:0;
   margin:18px 0 4px;
   font-size:1.18rem;
   color:var(--amber-soft);
@@ -427,6 +442,7 @@ b,strong{font-weight:800;}
   gap:10px;
   margin-top:12px;
 }
+.install .row .btn{min-width:0;}
 .btn{
   min-height:var(--tap);
   padding:12px 20px;
@@ -523,9 +539,9 @@ footer .ver{opacity:.7;font-size:.9rem;}
   border-radius:var(--radius);
   padding:16px 18px;
 }
-.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.card-icon{font-size:2rem;line-height:1;}
-.card h3{margin:0;font-size:1.25rem;color:var(--amber);line-height:1.25;}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-width:0;}
+.card-icon{font-size:2rem;line-height:1;flex:0 0 auto;}
+.card h3{margin:0;font-size:1.25rem;color:var(--amber);line-height:1.25;min-width:0;flex:1 1 auto;}
 .card p{margin:0;font-size:1.18rem;line-height:1.55;}
 
 /* --- круг суток --- */
@@ -553,11 +569,11 @@ footer .ver{opacity:.7;font-size:.9rem;}
 
 .period-btns{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:1fr 1fr;
   gap:8px;
   margin:0 0 16px;
 }
-@media (max-width:380px){.period-btns{grid-template-columns:1fr 1fr;}}
+@media (min-width:560px){.period-btns{grid-template-columns:repeat(4,1fr);}}
 .pbtn{
   min-height:var(--tap);
   padding:10px 6px;
@@ -578,8 +594,9 @@ footer .ver{opacity:.7;font-size:.9rem;}
   border-radius:var(--radius);
   padding:16px 18px;
 }
-.period-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.period-icon{font-size:2.4rem;line-height:1;}
+.period-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;min-width:0;}
+.period-head > div{min-width:0;}
+.period-icon{font-size:2.4rem;line-height:1;flex:0 0 auto;}
 .period-head h3{margin:0;font-size:1.4rem;color:var(--amber);}
 .period-head h3 small{font-size:1rem;color:var(--muted);font-weight:600;margin-left:6px;}
 .now{
@@ -612,19 +629,21 @@ footer .ver{opacity:.7;font-size:.9rem;}
 /* --- комплект --- */
 .kit{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
 .kit-item{
-  display:flex;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
   align-items:center;
-  gap:14px;
+  gap:12px;
   background:var(--panel);
   border:2px solid var(--line);
   border-radius:var(--radius);
   padding:14px 16px;
   min-height:72px;
 }
-.kit-icon{font-size:2.2rem;line-height:1;flex:0 0 auto;}
+.kit-item > div{min-width:0;}
+.kit-icon{font-size:2rem;line-height:1;}
 .kit-name{font-size:1.2rem;font-weight:800;}
 .kit-note{font-size:1.05rem;color:var(--muted);}
-.kit-check{margin-left:auto;color:var(--amber);font-size:1.6rem;font-weight:800;}
+.kit-check{color:var(--amber);font-size:1.4rem;font-weight:800;}
 
 /* --- что внутри --- */
 .inside-wrap{
@@ -676,6 +695,7 @@ footer .ver{opacity:.7;font-size:.9rem;}
   font-size:1.2rem;
   display:flex;align-items:center;justify-content:center;
 }
+.part-txt{min-width:0;flex:1 1 auto;}
 .part-txt b{color:var(--amber-soft);}
 
 /* --- викторина --- */
@@ -691,7 +711,7 @@ footer .ver{opacity:.7;font-size:.9rem;}
 .q-progress span.cur{background:var(--amber);animation:glowbar 1.6s ease-in-out infinite;}
 @keyframes glowbar{0%,100%{box-shadow:0 0 0 rgba(255,180,67,0);}50%{box-shadow:0 0 10px rgba(255,180,67,.8);}}
 .q-num{font-size:1rem;color:var(--muted);font-weight:700;}
-.q-text{margin:6px 0 16px;font-size:1.4rem;line-height:1.3;color:var(--amber);}
+.q-text{margin:6px 0 16px;font-size:clamp(1.2rem,5.5vw,1.4rem);line-height:1.3;color:var(--amber);}
 .q-answers{display:flex;flex-direction:column;gap:10px;}
 .q-btn{
   min-height:var(--tap);
@@ -757,4 +777,10 @@ footer .ver{opacity:.7;font-size:.9rem;}
   .sweep{display:none;}
   .inside .part.hl{filter:drop-shadow(0 0 8px rgba(255,180,67,0.9));}
   .stg,.pop,.q-feedback.show,.q-result-icon{opacity:1;transform:none;}
+}
+
+/* на узких экранах декоративная галочка в комплекте не нужна — текст важнее */
+@media (max-width:400px){
+  .kit-item{grid-template-columns:auto minmax(0,1fr);}
+  .kit-check{display:none;}
 }
