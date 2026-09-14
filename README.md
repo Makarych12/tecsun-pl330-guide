@@ -4,7 +4,8 @@
 для пожилого пользователя: большие плитки-темы → понятные пронумерованные шаги.
 Тёмная тема с янтарной «подсветкой дисплея», крупный текст, крупные кнопки.
 
-**Живая версия:** https://makarych12.github.io/tecsun-pl330-guide/
+**Живая версия (Vercel):** https://tecsun-pl330-guide.vercel.app/
+**Зеркало (GitHub Pages):** https://makarych12.github.io/tecsun-pl330-guide/
 
 ## Что внутри
 
@@ -76,5 +77,8 @@ python3 -m http.server 8000
 
 ## Деплой
 
-Статика хостится на GitHub Pages из ветки `main` (корень репозитория).
-Файл `.nojekyll` отключает обработку Jekyll.
+- **Vercel** (основной адрес): проект `tecsun-pl330-guide`, чистая статика из
+  корня, `vercel.json` задаёт заголовки (`sw.js` без кэша на CDN, ассеты —
+  immutable). Обновить: `npx vercel --prod`.
+- **GitHub Pages** (зеркало): ветка `main`, корень репозитория; `.nojekyll`
+  отключает Jekyll. Обновляется при каждом push.
