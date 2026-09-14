@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TECSUN PL-330 — Простая инструкция</title>
+<meta name="description" content="Простая пошаговая инструкция к радиоприёмнику Tecsun PL-330: включение, поиск станций, память, часы и будильник. Работает без интернета.">
+<meta name="theme-color" content="#12202C">
+<meta name="color-scheme" content="dark">
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="64x64" href="./assets/favicon.png">
+<link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+
+<!-- iOS: «Поделиться» → «На экран Домой» -->
+<link rel="apple-touch-icon" sizes="180x180" href="./assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PL-330">
+
+<link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ ГЛАВНЫЙ ЭКРАН ============ -->
+  <main id="home" class="screen">
+    <header class="header">
+      <div class="brand">TECSUN&nbsp;PL-330</div>
+      <h1>Простая инструкция</h1>
+      <p>Нажмите на нужную кнопку — увидите понятные шаги</p>
+    </header>
+
+    <div class="hero">
+      <div class="waves" aria-hidden="true">
+        <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+      </div>
+      <figure class="photo">
+        <picture>
+          <source type="image/webp"
+                  srcset="./assets/radio-photo-480.webp 480w, ./assets/radio-photo.webp 900w"
+                  sizes="(max-width: 400px) 320px, 320px">
+          <img src="./assets/radio-photo.jpg"
+               srcset="./assets/radio-photo-480.jpg 480w, ./assets/radio-photo.jpg 900w"
+               sizes="320px"
+               width="900" height="990"
+               alt="Радиоприёмник Tecsun PL-330 с выдвинутой антенной: слева динамик, в центре экран с частотой, справа кнопки и колёсики настройки"
+               fetchpriority="high" decoding="async">
+        </picture>
+      </figure>
+    </div>
+
+    <div class="dial" aria-hidden="true">
+      <div class="dial-top">
+        <span class="band">FM · СТЕРЕО</span>
+        <span class="freq">100.80<small>MHz</small></span>
+      </div>
+      <svg class="scale" viewBox="0 0 360 40" role="presentation">
+        <g id="ticks"></g>
+        <line class="needle" x1="20" y1="4" x2="20" y2="28"/>
+      </svg>
+    </div>
+
+    <section id="installHint" class="install" aria-live="polite"></section>
+
+    <nav id="menu" aria-label="Темы инструкции"></nav>
+  </main>
+
+  <!-- ============ ЭКРАН ТЕМЫ ============ -->
+  <article id="detail" class="screen" hidden>
+    <button class="backbtn" type="button" data-back><span class="arrow" aria-hidden="true">←</span> Назад к списку</button>
+    <div class="detail-icon" id="d-icon" aria-hidden="true"></div>
+    <h2 class="detail-title" id="d-title" tabindex="-1"></h2>
+    <div class="detail-body" id="d-body"></div>
+    <button class="backbtn bottom" type="button" data-back><span class="arrow" aria-hidden="true">←</span> Назад к списку</button>
+  </article>
+
+  <footer>
+    Инструкция составлена по официальному руководству Tecsun PL-330.<br>
+    Держите приёмник рядом, пробуйте кнопки по одной — так проще всего запомнить.<br>
+    <span class="ver">Фото: Wikimedia Commons, CC0 · Приложение работает без интернета</span>
+  </footer>
+</div>
+
+<button class="top-link" id="topLink" type="button">Наверх ↑</button>
+
+<script src="./js/app.js"></script>
+</body>
+</html>

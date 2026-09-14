@@ -1,0 +1,446 @@
+/* ============================================================
+   TECSUN PL-330 — Простая инструкция
+   Тёмный фон + янтарная «подсветка дисплея». Крупный текст,
+   крупные кнопки. Все анимации отключаются при
+   prefers-reduced-motion: reduce (см. конец файла).
+   ============================================================ */
+
+:root{
+  --bg:#12202C;
+  --bg-top:#17293A;
+  --panel:#1B2E3D;
+  --panel-2:#223A4D;
+  --amber:#FFB443;
+  --amber-deep:#E8951B;
+  --amber-soft:#FFE2AE;
+  --text:#F4EFE4;
+  --muted:#B4C8D6;
+  --line:rgba(255,255,255,0.10);
+  --radius:18px;
+  --tap:56px;               /* минимальная высота тач-зоны */
+  --focus:0 0 0 4px #12202C, 0 0 0 8px var(--amber);
+}
+
+*{box-sizing:border-box;}
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse at top, var(--bg-top) 0%, var(--bg) 55%);
+  background-color:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:18px;
+  min-height:100vh;
+  min-height:100dvh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  /* вырезы/«чёлки» телефонов в standalone-режиме */
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+}
+button{font-family:inherit;}
+b,strong{font-weight:800;}
+
+.wrap{
+  max-width:640px;
+  margin:0 auto;
+  padding:18px 18px 72px;
+  padding-top:calc(18px + env(safe-area-inset-top));
+}
+
+/* Видимый фокус для клавиатуры (Bluetooth-клавиатура/трекпад) */
+:focus{outline:none;}
+:focus-visible{
+  box-shadow:var(--focus);
+  border-radius:12px;
+}
+
+.screen[hidden]{display:none;}
+
+/* ---------- Шапка ---------- */
+.header{
+  text-align:center;
+  padding:12px 6px 10px;
+}
+.header .brand{
+  font-size:1.05rem;
+  letter-spacing:0.16em;
+  color:var(--muted);
+  font-weight:700;
+}
+.header h1{
+  margin:4px 0 6px;
+  font-size:2.4rem;
+  font-weight:800;
+  color:var(--amber);
+  line-height:1.05;
+  text-shadow:0 0 18px rgba(255,180,67,0.25);
+}
+.header p{
+  margin:0;
+  font-size:1.2rem;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+/* ---------- Фото приёмника с «эфиром» ---------- */
+.hero{
+  position:relative;
+  margin:18px auto 8px;
+  max-width:400px;
+  isolation:isolate;
+}
+.waves{
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  overflow:visible;
+}
+.waves .ring{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:70%;
+  aspect-ratio:1/1;
+  border:3px solid var(--amber);
+  border-radius:50%;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(0.75);
+  animation:wave 7s ease-out infinite;
+  will-change:transform,opacity;
+}
+.waves .ring:nth-child(2){animation-delay:2.3s;}
+.waves .ring:nth-child(3){animation-delay:4.6s;}
+@keyframes wave{
+  0%  {opacity:0;   transform:translate(-50%,-50%) scale(0.75);}
+  12% {opacity:.45;}
+  100%{opacity:0;   transform:translate(-50%,-50%) scale(1.55);}
+}
+.photo{
+  display:block;
+  position:relative;
+  margin:0 auto;
+  width:min(100%, 320px);
+  border-radius:22px;
+  overflow:hidden;
+  border:3px solid #33495C;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.55),
+    0 0 0 6px rgba(255,180,67,0.08),
+    0 0 40px rgba(255,180,67,0.14);
+  background:#0A141C;
+}
+.photo img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:900/990;
+  object-fit:cover;
+}
+
+/* ---------- Декоративный дисплей с шкалой ---------- */
+.dial{
+  margin:20px auto 4px;
+  background:linear-gradient(180deg,#0E1A24,#0A141C);
+  border:3px solid #33495C;
+  border-radius:14px;
+  padding:14px 18px 12px;
+  max-width:420px;
+  box-shadow:inset 0 0 30px rgba(0,0,0,0.5), 0 0 24px rgba(255,180,67,0.08);
+}
+.dial-top{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+}
+.dial .band{
+  white-space:nowrap;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--amber-soft);
+  letter-spacing:0.08em;
+}
+.dial .freq{
+  font-size:2.1rem;
+  font-weight:700;
+  color:var(--amber);
+  letter-spacing:0.04em;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 0 10px rgba(255,180,67,0.45);
+  animation:glow 4s ease-in-out infinite;
+}
+.dial .freq small{
+  font-size:1rem;
+  font-weight:600;
+  margin-left:6px;
+  color:var(--amber-soft);
+}
+@media (max-width:360px){
+  .dial .freq{font-size:1.7rem;}
+  .dial .band{font-size:.95rem;}
+}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 8px rgba(255,180,67,0.35);}
+  50%    {text-shadow:0 0 16px rgba(255,180,67,0.7);}
+}
+.scale{
+  display:block;
+  width:100%;
+  height:auto;
+  margin-top:8px;
+}
+.scale .tick{stroke:#5B7891;stroke-width:1.5;}
+.scale .tick.major{stroke:#8AA4B8;stroke-width:2;}
+.scale .num{fill:#8AA4B8;font-size:11px;font-family:inherit;}
+.scale .needle{
+  stroke:var(--amber);
+  stroke-width:3;
+  stroke-linecap:round;
+  filter:drop-shadow(0 0 4px rgba(255,180,67,0.8));
+  animation:needle 18s ease-in-out infinite alternate;
+  transform-box:fill-box;
+}
+@keyframes needle{
+  0%  {transform:translateX(0);}
+  35% {transform:translateX(120px);}
+  60% {transform:translateX(90px);}
+  100%{transform:translateX(290px);}
+}
+
+/* ---------- Список тем ---------- */
+.cat-title{
+  font-size:1.45rem;
+  font-weight:800;
+  color:var(--amber);
+  margin:30px 4px 12px;
+}
+#menu .cat-title:first-child{margin-top:22px;}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width:380px){
+  .grid{grid-template-columns:1fr;}
+}
+
+.tile{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+  background:var(--panel);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px 14px;
+  text-align:left;
+  color:var(--text);
+  cursor:pointer;
+  min-height:104px;
+  width:100%;
+  transition:transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.tile:hover{border-color:rgba(255,180,67,0.45);}
+.tile:active{
+  transform:scale(0.97);
+  background:var(--panel-2);
+  border-color:var(--amber-deep);
+}
+.tile .icon{font-size:2rem;line-height:1;}
+.tile .label{font-size:1.18rem;font-weight:700;line-height:1.25;}
+
+/* ---------- Экран темы ---------- */
+.backbtn{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:12px;
+  background:var(--panel-2);
+  border:2px solid var(--amber-deep);
+  color:var(--amber);
+  font-size:1.25rem;
+  font-weight:800;
+  padding:14px 20px;
+  min-height:var(--tap);
+  border-radius:14px;
+  cursor:pointer;
+  width:100%;
+  margin-bottom:20px;
+}
+.backbtn:active{transform:scale(0.98);}
+.backbtn .arrow{font-size:1.5rem;line-height:1;}
+.backbtn.bottom{margin-top:26px;margin-bottom:0;}
+
+.detail-icon{font-size:3rem;line-height:1;margin-bottom:8px;}
+.detail-title{
+  font-size:1.9rem;
+  font-weight:800;
+  color:var(--amber);
+  margin:4px 0 18px;
+  line-height:1.15;
+}
+.detail-body{
+  font-size:1.3rem;
+  line-height:1.6;
+}
+.detail-body p{margin:0 0 16px;}
+
+/* Нумерованные шаги — крупные янтарные номера */
+.detail-body ol{
+  list-style:none;
+  counter-reset:step;
+  margin:0 0 10px;
+  padding:0;
+}
+.detail-body ol li{
+  counter-increment:step;
+  position:relative;
+  padding-left:60px;
+  margin-bottom:18px;
+  min-height:46px;
+}
+.detail-body ol li::before{
+  content:counter(step);
+  position:absolute;
+  left:0;
+  top:0;
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:var(--panel-2);
+  border:2px solid var(--amber-deep);
+  color:var(--amber);
+  font-weight:800;
+  font-size:1.3rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.detail-body ul{
+  margin:0 0 10px;
+  padding-left:1.2em;
+}
+.detail-body ul li{margin-bottom:12px;}
+
+.note{
+  background:var(--panel);
+  border-left:6px solid var(--amber-deep);
+  border-radius:10px;
+  padding:14px 16px;
+  margin:18px 0 4px;
+  font-size:1.18rem;
+  color:var(--amber-soft);
+}
+.key{
+  display:inline-block;
+  background:var(--panel-2);
+  border:2px solid var(--amber-deep);
+  color:var(--amber);
+  border-radius:8px;
+  padding:2px 10px;
+  font-weight:800;
+  font-size:1.08rem;
+  white-space:nowrap;
+}
+.wheel{
+  display:inline-block;
+  background:var(--panel-2);
+  border:2px solid var(--muted);
+  color:var(--text);
+  border-radius:20px;
+  padding:2px 12px;
+  font-weight:700;
+  font-size:1.08rem;
+  white-space:nowrap;
+}
+
+/* ---------- Подсказка про установку ---------- */
+.install{
+  display:none;
+  margin:22px 0 0;
+  background:var(--panel);
+  border:2px solid rgba(255,180,67,0.35);
+  border-radius:var(--radius);
+  padding:16px;
+  font-size:1.12rem;
+  line-height:1.5;
+  color:var(--amber-soft);
+}
+.install.show{display:block;}
+.install .row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:12px;
+}
+.btn{
+  min-height:var(--tap);
+  padding:12px 20px;
+  border-radius:14px;
+  border:2px solid var(--amber-deep);
+  background:var(--amber);
+  color:#12202C;
+  font-size:1.15rem;
+  font-weight:800;
+  cursor:pointer;
+  flex:1 1 auto;
+}
+.btn.secondary{
+  background:transparent;
+  color:var(--amber);
+}
+.btn:active{transform:scale(0.98);}
+
+/* ---------- Подвал ---------- */
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:1rem;
+  margin-top:40px;
+  line-height:1.6;
+}
+footer a{color:var(--muted);}
+footer .ver{opacity:.7;font-size:.9rem;}
+
+.top-link{
+  position:fixed;
+  right:18px;
+  bottom:calc(18px + env(safe-area-inset-bottom));
+  background:var(--amber);
+  color:#1B2E3D;
+  font-weight:800;
+  font-size:1.05rem;
+  border:none;
+  border-radius:50px;
+  min-height:var(--tap);
+  padding:14px 20px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.4);
+  display:none;
+  cursor:pointer;
+  z-index:5;
+}
+.top-link.show{display:block;}
+
+/* ---------- Переходы между экранами ---------- */
+.screen.enter{animation:screenIn .28s ease-out both;}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(14px);}
+  to  {opacity:1;transform:none;}
+}
+
+/* ---------- Уменьшение движения ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{
+    animation:none !important;
+    transition:none !important;
+  }
+  .waves{display:none;}
+  .dial .freq{text-shadow:0 0 10px rgba(255,180,67,0.45);}
+}

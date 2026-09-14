@@ -1,0 +1,20 @@
+{
+  "name": "TECSUN PL-330 — Простая инструкция",
+  "short_name": "PL-330",
+  "description": "Простая пошаговая инструкция к радиоприёмнику Tecsun PL-330. Крупный текст, работает без интернета.",
+  "lang": "ru",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#12202C",
+  "theme_color": "#12202C",
+  "categories": ["education", "utilities"],
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
