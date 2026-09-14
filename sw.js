@@ -2,7 +2,7 @@
    Стратегия: cache-first для всего app shell. При смене VERSION старый
    кэш удаляется на этапе activate. */
 
-const VERSION = 'v2.3.0';
+const VERSION = 'v2.4.0';
 const CACHE = `pl330-guide-${VERSION}`;
 
 const APP_SHELL = [
@@ -17,6 +17,11 @@ const APP_SHELL = [
   './assets/radio-photo.jpg',
   './assets/radio-photo-480.webp',
   './assets/radio-photo-480.jpg',
+  './assets/grundig.webp',
+  './assets/grundig.jpg',
+  './assets/grundig-480.webp',
+  './assets/grundig-480.jpg',
+  './assets/grundig-thumb.webp',
   './assets/icon.svg',
   './assets/favicon.png',
   './assets/icon-192.png',

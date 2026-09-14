@@ -35,7 +35,9 @@
       btn.type = 'button';
       btn.className = 'tile' + (cat.special ? ' tile-fun' : '') + (t.tileClass ? ' ' + t.tileClass : '');
       btn.dataset.topic = t.id;
-      btn.innerHTML = `<span class="icon" aria-hidden="true">${t.icon}</span><span class="label">${t.title}</span>`;
+      btn.innerHTML = t.thumb
+        ? `<img class="thumb" src="${t.thumb}" alt="" width="240" height="180" loading="lazy"><span class="tile-txt"><span class="label">${t.title}</span><span class="sub">Винтажный немецкий приёмник, 1970 год</span></span>`
+        : `<span class="icon" aria-hidden="true">${t.icon}</span><span class="label">${t.title}</span>`;
       grid.appendChild(btn);
     });
     menu.appendChild(grid);

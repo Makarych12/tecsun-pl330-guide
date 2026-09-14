@@ -535,4 +535,116 @@
       document.addEventListener('pl330:installable', draw);
     },
   };
+
+  // ============================================================
+  // 7. Второй приёмник — Grundig Concert-Boy Automatic (музейная карточка)
+  //    Фото — собственный снимок владельца. Данные — radiomuseum.org
+  // ============================================================
+  const cities = ['Moskau', 'Minsk', 'Kiew', 'Warszawa', 'Praha', 'Paris', 'BBC', 'Luxemburg', 'Hilversum', 'Monte Carlo', 'Motala', 'Lahti', 'Kalundborg', 'Deutsche Welle', 'Europa 1', 'Bayer. Rundfunk', 'WDR', 'Bremen', 'Saarbrücken', 'France I'];
+  const gLinks = [
+    { t: 'Схема Concert-Boy N210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_n210_automatic_sch.pdf/download.html' },
+    { t: 'Сервисная документация Concert-Boy 210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_210_automatic.pdf/download.html' },
+    { t: 'Поиск документов по модели на eServiceInfo', u: 'https://www.eserviceinfo.com/index.php?what=search2&searchstring=grundig+concert+boy+n+automatic' },
+    { t: 'Архив инструкций Grundig на mods.dk', u: 'https://www.mods.dk/manual.php?brand=grundig' },
+    { t: 'Карточка модели на Radiomuseum.org (фото, схемы, данные)', u: 'https://www.radiomuseum.org/r/grundig_concert_boy_automatic_n21.html' },
+  ];
+
+  views.grundig = {
+    id: 'grundig', cat: 'museum', tileClass: 'tile-museum', thumb: './assets/grundig-thumb.webp',
+    icon: '📻', title: 'Grundig Concert-Boy Automatic',
+    render() {
+      return `
+      <p class="lead stg">Второй приёмник в доме — винтажный немецкий, на полвека старше Tecsun. Пошаговой инструкции к нему не сохранилось, поэтому это скорее музейная карточка: фото, история, факты и где искать документы.</p>
+
+      <figure class="photo photo-wide stg">
+        <picture>
+          <source type="image/webp" srcset="./assets/grundig-480.webp 480w, ./assets/grundig.webp 900w" sizes="(max-width: 640px) 92vw, 600px">
+          <img src="./assets/grundig.jpg" srcset="./assets/grundig-480.jpg 480w, ./assets/grundig.jpg 900w" sizes="(max-width: 640px) 92vw, 600px"
+               width="900" height="675" decoding="async"
+               alt="Радиоприёмник Grundig Concert-Boy N Automatic: серебристая решётка динамика слева, справа шкала с названиями городов и диапазонами L, M, K1, K2, U, четыре ручки и ручка KW-Lupe">
+        </picture>
+        <figcaption>Grundig Concert-Boy N Automatic — собственное фото владельца</figcaption>
+      </figure>
+
+      <div class="badges stg">
+        <span class="badge">🇩🇪 Германия, Фюрт</span>
+        <span class="badge">📅 1970–1972</span>
+        <span class="badge">🔩 12 транзисторов</span>
+        <span class="badge">⚖️ 4,3 кг</span>
+      </div>
+
+      <div class="cards">
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🏛️</span><h3>История</h3></div>
+          <p>Фирма Grundig из города Фюрт в 1950–70-е годы была одним из главных производителей радио в Европе. Линейка переносных приёмников <b>Concert-Boy</b> («концертный мальчик») выпускалась много лет и была одной из самых популярных: добротный звук, крупная шкала, работа и от сети, и от батареек. Ваш экземпляр — модель <b>Concert-Boy Automatic N210</b>, выпускалась в 1970–1972 годах и стоила тогда 325 немецких марок.</p>
+          <p class="small">Точный номер модели обычно напечатан на табличке на задней крышке — там же указан год.</p>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">📡</span><h3>Какие волны принимает</h3></div>
+          <p>Кнопки над шкалой подписаны по-немецки:</p>
+          <ul class="plain">
+            <li><b>L</b> — длинные волны (Langwelle).</li>
+            <li><b>M</b> — средние волны (Mittelwelle).</li>
+            <li><b>K1</b> и <b>K2</b> — два участка коротких волн (Kurzwelle).</li>
+            <li><b>U</b> — УКВ, то есть обычное FM-радио (Ultrakurzwelle).</li>
+          </ul>
+          <p>Маленькая ручка <b>KW-Lupe</b> («лупа для коротких волн») справа — это точная подстройка на КВ, по смыслу то же, что шаг 10 Гц у Tecsun, только механическая. А слово <b>Automatic</b> в названии означает автоподстройку на УКВ: приёмник сам «держит» станцию, чтобы она не уплывала.</p>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🗺️</span><h3>Шкала с городами вместо частот</h3></div>
+          <p>На шкале написаны не цифры, а названия городов и радиостанций: так в те годы было принято — слушатель искал не «1548 кГц», а просто «Moskau» или «BBC». На вашем приёмнике можно прочитать:</p>
+          <div class="city-strip" aria-hidden="true"><div class="city-track">${cities.concat(cities).map((c) => `<span>${c}</span>`).join('')}</div></div>
+          <p class="small">Многие из этих станций давно замолчали, но шкала — маленькая карта радиоэфира Европы 1970 года.</p>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🔌</span><h3>Питание</h3></div>
+          <ul class="plain">
+            <li>От сети 110–240 В — шнур подключается сзади.</li>
+            <li>От <b>шести батареек по 1,5 В</b> (крупных, «бочонков»). Одного комплекта хватало примерно на 145 часов.</li>
+            <li>Выпускалось и крепление для автомобиля — от 12 В.</li>
+          </ul>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">📏</span><h3>Немного цифр</h3></div>
+          <ul class="plain">
+            <li>Размер 36 × 21 × 11 см, вес 4,3 кг — в 20 раз тяжелее Tecsun.</li>
+            <li>Большой овальный динамик 17,5 × 11 см, 2 Вт — отсюда «концертный» звук.</li>
+            <li>Ферритовая антенна внутри — 18 см (у Tecsun — несколько сантиметров).</li>
+            <li>Экспортный вариант с английскими надписями назывался Transistor 1005 Automatic.</li>
+          </ul>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">⚖️</span><h3>Два приёмника рядом</h3></div>
+          <div class="vs">
+            <div class="vs-col"><div class="vs-h">Grundig, 1970</div>
+              <ul class="plain"><li>12 транзисторов</li><li>Шкала с городами, стрелка на тросике</li><li>6 батареек, 4,3 кг</li><li>Большой динамик, тёплый звук</li></ul></div>
+            <div class="vs-col"><div class="vs-h">Tecsun, 2020</div>
+              <ul class="plain"><li>Цифровая обработка сигнала (DSP)</li><li>650 станций в памяти, умный поиск</li><li>Аккумулятор, 210 г</li><li>SSB, будильник, часы</li></ul></div>
+          </div>
+          <p class="small">Полвека разницы — а слушают они один и тот же эфир.</p>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🛠️</span><h3>Если захотите его оживить</h3></div>
+          <ul class="plain">
+            <li>Не включайте в сеть сразу после долгого хранения: у старых конденсаторов внутри со временем «высыхает» начинка, и они могут выйти из строя с хлопком. Пусть сначала посмотрит мастер.</li>
+            <li>Загляните в отсек батареек: старые батарейки часто текут и разъедают контакты — их нужно почистить.</li>
+            <li>Треск при повороте ручек — обычное дело для такого возраста, лечится чисткой переменных резисторов.</li>
+            <li>Такие приёмники охотно чинят и коллекционируют — запчасти и схемы найти можно (ссылки ниже).</li>
+          </ul>
+        </section>
+
+        <section class="card stg links-card">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">📚</span><h3>Дополнительные материалы</h3></div>
+          <p>Это старые технические документы на немецком языке для мастеров по ремонту — схемы и сервисные описания. Полной понятной инструкции на русском для этой модели, к сожалению, не сохранилось: аппарат слишком старый. Для открытия ссылок нужен интернет.</p>
+          <ul class="links">${gLinks.map((l) => `<li><a href="${l.u}" target="_blank" rel="noopener noreferrer">${esc(l.t)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul>
+        </section>
+      </div>`;
+    },
+  };
 })();

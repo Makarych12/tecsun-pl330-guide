@@ -13,6 +13,7 @@ window.PL330.categories = [
   { id: 'extra',  title: 'Дополни\u00ADтельно' },
   { id: 'ssb',    title: 'SSB и дальний приём' },
   { id: 'fun',    title: 'Интересное', special: true },
+  { id: 'museum', title: 'Второй приёмник' },
 ];
 
 window.PL330.topics = [

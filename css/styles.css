@@ -873,3 +873,118 @@ footer .ver{opacity:.7;font-size:.9rem;}
 .other[open] summary::before{transform:rotate(90deg);}
 .other-body{padding:0 16px 8px;font-size:1.1rem;line-height:1.5;}
 .other-body p{margin:0 0 10px;}
+
+/* ---------- Второй приёмник: Grundig ---------- */
+.tile-museum{
+  grid-column:1 / -1;
+  flex-direction:row;
+  align-items:center;
+  gap:16px;
+  border-color:rgba(255,180,67,0.45);
+  background:linear-gradient(120deg, #23384A 0%, var(--panel) 60%);
+}
+.tile-museum .thumb{
+  width:112px;height:84px;
+  flex:0 0 auto;
+  object-fit:cover;
+  border-radius:12px;
+  border:2px solid #33495C;
+  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+}
+.tile-museum .label{font-size:1.2rem;}
+.tile-museum .sub{display:block;font-size:1rem;color:var(--muted);font-weight:600;margin-top:2px;}
+.tile-museum .tile-txt{display:block;min-width:0;}
+.tile-museum .label{display:block;}
+@media (max-width:360px){
+  .tile-museum{flex-direction:column;align-items:flex-start;}
+  .tile-museum .thumb{width:100%;height:auto;aspect-ratio:4/3;}
+}
+
+.photo-wide{
+  width:100%;
+  max-width:600px;
+  margin:0 auto 14px;
+  animation:photoIn .8s ease-out both;
+}
+.photo-wide img{aspect-ratio:900/675;}
+.photo-wide figcaption{
+  font-size:.95rem;
+  color:var(--muted);
+  text-align:center;
+  padding:8px 10px;
+  background:#0E1A24;
+}
+@keyframes photoIn{
+  from{opacity:0;transform:scale(.97);}
+  to  {opacity:1;transform:none;}
+}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;}
+.badge{
+  background:var(--panel-2);
+  border:2px solid rgba(255,180,67,0.35);
+  border-radius:20px;
+  padding:6px 14px;
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--amber-soft);
+}
+.card .plain{margin:8px 0 0;padding-left:1.1em;font-size:1.15rem;line-height:1.5;}
+.card .plain li{margin-bottom:8px;}
+.card .small{font-size:1.02rem;color:var(--muted);margin-top:10px;}
+.card p + p{margin-top:10px;}
+
+/* бегущая строка городов со шкалы — очень медленно */
+.city-strip{
+  overflow:hidden;
+  margin:12px -18px;
+  padding:10px 0;
+  background:linear-gradient(180deg,#0E1A24,#0A141C);
+  border-top:2px solid #33495C;
+  border-bottom:2px solid #33495C;
+  mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.city-track{
+  display:flex;
+  gap:26px;
+  width:max-content;
+  animation:cities 70s linear infinite;
+}
+.city-track span{
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--amber);
+  text-shadow:0 0 8px rgba(255,180,67,0.5);
+  white-space:nowrap;
+}
+@keyframes cities{to{transform:translateX(-50%);}}
+
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+@media (max-width:420px){.vs{grid-template-columns:1fr;}}
+.vs-col{background:var(--panel-2);border-radius:12px;padding:12px;}
+.vs-h{font-weight:800;color:var(--amber);font-size:1.1rem;margin-bottom:6px;}
+.vs .plain{padding-left:1em;font-size:1.05rem;}
+
+.links{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.links a{
+  display:block;
+  min-height:var(--tap);
+  padding:12px 14px;
+  border-radius:12px;
+  background:var(--panel-2);
+  border:2px solid var(--line);
+  color:var(--amber-soft);
+  font-size:1.08rem;
+  font-weight:700;
+  text-decoration:none;
+  line-height:1.4;
+}
+.links a:hover{border-color:var(--amber-deep);}
+.links a span{color:var(--amber);}
+
+@media (prefers-reduced-motion: reduce){
+  .city-track{animation:none;flex-wrap:wrap;width:auto;}
+  .city-track span:nth-child(n+21){display:none;}
+}
