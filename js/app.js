@@ -31,6 +31,7 @@
     const items = cat.special
       ? shown.filter((v) => !v.cat)
       : [...shown.filter((v) => v.cat === cat.id), ...topics.filter((t) => t.cat === cat.id)];
+    if (cat.order) items.sort((a, b) => cat.order.indexOf(a.id) - cat.order.indexOf(b.id));
     items.forEach((t) => {
       const btn = document.createElement('button');
       btn.type = 'button';
