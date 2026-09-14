@@ -14,6 +14,26 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   // ============================================================
+  // 0. Окружение: телефон, браузер, встроенный браузер мессенджера
+  // ============================================================
+  const ua = navigator.userAgent || '';
+  const env = {
+    standalone: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true,
+    ios: /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1),
+    android: /Android/i.test(ua),
+    // встроенные браузеры: Telegram, WhatsApp, VK, Viber, Instagram, Facebook, Одноклассники, Android WebView
+    inApp: /Telegram|WhatsApp|VKAndroidApp|VKClient|vk_client|Viber|Instagram|FBAN|FBAV|OKApp|OdklApp|\bwv\b/i.test(ua),
+    samsung: /SamsungBrowser/i.test(ua),
+    yandex: /YaBrowser/i.test(ua),
+    firefox: /Firefox|FxiOS/i.test(ua),
+    opera: /OPR\/|Opera/i.test(ua),
+    mi: /MiuiBrowser|XiaoMi/i.test(ua),
+    safari: /Safari/i.test(ua) && !/CriOS|FxiOS|Chrome|YaBrowser|OPR/i.test(ua),
+  };
+  env.mobile = env.ios || env.android;
+  window.PL330.env = env;
+
+  // ============================================================
   // 1. «А вы знали?» — карточки фактов
   // ============================================================
   const facts = [
@@ -385,6 +405,120 @@
         if (e.target.closest('[data-restart]')) { i = 0; score = 0; question(); }
       });
       question();
+    },
+  };
+
+  // ============================================================
+  // 6. Поставить на экран телефона — инструкция под браузер
+  // ============================================================
+  function installSteps() {
+    const key = (t) => `<span class="key">${t}</span>`;
+    if (env.ios) {
+      const inSafari = env.safari && !env.inApp;
+      return {
+        title: inSafari ? 'iPhone — Safari' : 'iPhone',
+        pre: inSafari ? '' : `<div class="note">Сначала откройте эту ссылку в <b>Safari</b> (стандартный браузер iPhone): нажмите кнопку с тремя точками или «…» и выберите <b>«Открыть в Safari»</b>. Или скопируйте адрес и вставьте его в Safari.</div>`,
+        steps: [
+          `Внизу экрана нажмите кнопку <b>«Поделиться»</b> ${key('⎙')} — квадрат со стрелкой вверх.`,
+          `Прокрутите список вниз и нажмите <b>«На экран «Домой»»</b> ${key('⊕')}.`,
+          `Справа вверху нажмите <b>«Добавить»</b>.`,
+        ],
+        after: 'На экране появится иконка «PL-330». Открывайте инструкцию через неё — как обычное приложение.',
+      };
+    }
+    if (env.inApp) {
+      return {
+        title: 'Ссылка открыта внутри мессенджера',
+        pre: `<div class="note">Встроенный браузер Telegram, WhatsApp, VK или Viber не умеет ставить приложения. Нужно открыть ссылку в обычном браузере.</div>`,
+        steps: [
+          `Нажмите три точки ${key('⋮')} в правом верхнем углу (или «…»).`,
+          `Выберите <b>«Открыть в браузере»</b> или <b>«Открыть в Chrome»</b>.`,
+          `В открывшемся браузере снова зайдите в этот раздел — здесь появится кнопка <b>«Установить»</b> или шаги для вашего браузера.`,
+        ],
+        after: '',
+      };
+    }
+    if (env.samsung) {
+      return { title: 'Android — Samsung Internet', pre: '',
+        steps: [
+          `Нажмите кнопку меню ${key('≡')} внизу справа.`,
+          `Выберите <b>«Добавить страницу на»</b> → <b>«Главный экран»</b>.`,
+          `Нажмите <b>«Добавить»</b>.`,
+        ], after: 'Иконка «PL-330» появится на главном экране.' };
+    }
+    if (env.yandex) {
+      return { title: 'Android — Яндекс Браузер', pre: '',
+        steps: [
+          `Нажмите три точки ${key('⋮')} в строке поиска (справа).`,
+          `Выберите <b>«Добавить на главный экран»</b> (может называться «Добавить ярлык»).`,
+          `Подтвердите — нажмите <b>«Добавить»</b>.`,
+        ], after: 'Если пункта нет — откройте ссылку в Chrome: там установка работает точно.' };
+    }
+    if (env.firefox) {
+      return { title: 'Android — Firefox', pre: '',
+        steps: [
+          `Нажмите три точки ${key('⋮')}.`,
+          `Выберите <b>«Установить»</b> или <b>«Добавить на главный экран»</b>.`,
+          `Нажмите <b>«Добавить»</b>.`,
+        ], after: '' };
+    }
+    if (env.mi || env.opera) {
+      return { title: 'Android', pre: '',
+        steps: [
+          `Откройте меню браузера (три точки ${key('⋮')} или три полоски ${key('≡')}).`,
+          `Найдите пункт <b>«Добавить на главный экран»</b> / <b>«Добавить ярлык»</b>.`,
+          `Нажмите <b>«Добавить»</b>.`,
+        ], after: 'Если такого пункта нет — откройте ссылку в Chrome, там установка есть всегда.' };
+    }
+    // Chrome на Android и всё остальное
+    return { title: env.android ? 'Android — Chrome' : 'Компьютер или планшет', pre: '',
+      steps: [
+        `Нажмите три точки ${key('⋮')} в правом верхнем углу.`,
+        `Выберите <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b>.`,
+        `Нажмите <b>«Установить»</b>.`,
+      ], after: 'На экране появится иконка «PL-330». Иногда Chrome сам показывает внизу полоску «Установить приложение» — можно нажать и её.' };
+  }
+
+  views.install = {
+    id: 'install', cat: 'start', tileClass: 'tile-install', icon: '📲', title: 'Поставить на экран телефона',
+    render() {
+      if (env.standalone) {
+        return `<div class="ok-box stg"><span aria-hidden="true">✅</span>
+          <div><b>Уже установлено.</b> Вы открыли инструкцию как приложение — оно работает без интернета.</div></div>`;
+      }
+      const g = installSteps();
+      return `
+      <p class="lead stg">После установки инструкция открывается с иконки на экране, как любое приложение, и работает без интернета.</p>
+      <div id="installNative" class="stg"></div>
+      <h3 class="how-title stg">${esc(g.title)}</h3>
+      ${g.pre ? `<div class="stg">${g.pre}</div>` : ''}
+      <ol>${g.steps.map((t) => `<li class="stg">${t}</li>`).join('')}</ol>
+      ${g.after ? `<div class="note stg">${g.after}</div>` : ''}
+      <details class="other stg">
+        <summary>У меня другой телефон или браузер</summary>
+        <div class="other-body">
+          <p><b>iPhone (Safari):</b> «Поделиться» ⎙ → «На экран «Домой»» → «Добавить».</p>
+          <p><b>Android (Chrome):</b> ⋮ → «Установить приложение» или «Добавить на главный экран».</p>
+          <p><b>Samsung Internet:</b> ≡ → «Добавить страницу на» → «Главный экран».</p>
+          <p><b>Яндекс Браузер:</b> ⋮ → «Добавить на главный экран».</p>
+          <p><b>Из Telegram / WhatsApp / VK:</b> сначала ⋮ → «Открыть в браузере», потом шаги выше.</p>
+        </div>
+      </details>`;
+    },
+    init(el) {
+      const box = el.querySelector('#installNative');
+      if (!box) return;
+      const draw = () => {
+        if (!window.PL330.deferredPrompt) { box.innerHTML = ''; return; }
+        box.innerHTML = `<div class="native-box"><b>Ваш браузер умеет ставить приложение сам</b> — просто нажмите кнопку:
+          <button type="button" class="btn big" data-native>📲 Установить</button></div>`;
+        box.querySelector('[data-native]').addEventListener('click', async () => {
+          const ok = await window.PL330.promptInstall();
+          box.innerHTML = ok ? '<div class="ok-box"><span aria-hidden="true">✅</span><div><b>Готово!</b> Иконка «PL-330» появилась на экране телефона.</div></div>' : '';
+        });
+      };
+      draw();
+      document.addEventListener('pl330:installable', draw);
     },
   };
 })();

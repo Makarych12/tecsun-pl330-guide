@@ -784,3 +784,49 @@ footer .ver{opacity:.7;font-size:.9rem;}
   .kit-item{grid-template-columns:auto minmax(0,1fr);}
   .kit-check{display:none;}
 }
+
+/* ---------- Установка на телефон ---------- */
+.install-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:1.2rem;}
+.install-head span{font-size:1.8rem;line-height:1;}
+.tile-install{
+  border-color:var(--amber);
+  background:linear-gradient(160deg, #2A4258 0%, var(--panel) 100%);
+  box-shadow:0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.25), 0 0 18px rgba(255,180,67,0.18);
+}
+.how-title{font-size:1.35rem;color:var(--amber);margin:6px 0 12px;}
+.native-box{
+  background:rgba(255,180,67,0.10);
+  border:2px solid var(--amber);
+  border-radius:var(--radius);
+  padding:16px;
+  margin:0 0 18px;
+  font-size:1.15rem;
+  line-height:1.5;
+}
+.btn.big{display:block;width:100%;margin-top:12px;font-size:1.3rem;min-height:64px;}
+.ok-box{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,180,67,0.10);
+  border:2px solid var(--amber-deep);
+  border-radius:var(--radius);
+  padding:16px;
+  font-size:1.2rem;
+  line-height:1.5;
+}
+.ok-box span{font-size:2rem;line-height:1;flex:0 0 auto;}
+.other{margin-top:22px;border:2px solid var(--line);border-radius:var(--radius);background:var(--panel);}
+.other summary{
+  cursor:pointer;
+  padding:14px 16px;
+  min-height:var(--tap);
+  font-size:1.15rem;
+  font-weight:800;
+  color:var(--amber-soft);
+  list-style:none;
+  display:flex;align-items:center;gap:10px;
+}
+.other summary::-webkit-details-marker{display:none;}
+.other summary::before{content:"▸";color:var(--amber);font-size:1.3rem;transition:transform .2s ease;}
+.other[open] summary::before{transform:rotate(90deg);}
+.other-body{padding:0 16px 8px;font-size:1.1rem;line-height:1.5;}
+.other-body p{margin:0 0 10px;}

@@ -28,12 +28,12 @@
     const grid = document.createElement('div');
     grid.className = 'grid';
     const items = cat.special
-      ? Object.values(views)
-      : topics.filter((t) => t.cat === cat.id);
+      ? Object.values(views).filter((v) => !v.cat)
+      : [...Object.values(views).filter((v) => v.cat === cat.id), ...topics.filter((t) => t.cat === cat.id)];
     items.forEach((t) => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'tile' + (cat.special ? ' tile-fun' : '');
+      btn.className = 'tile' + (cat.special ? ' tile-fun' : '') + (t.tileClass ? ' ' + t.tileClass : '');
       btn.dataset.topic = t.id;
       btn.innerHTML = `<span class="icon" aria-hidden="true">${t.icon}</span><span class="label">${t.title}</span>`;
       grid.appendChild(btn);
@@ -165,60 +165,68 @@
     window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
   });
 
-  // ---------------- Подсказка про установку ----------------
+  // ---------------- Установка на экран телефона ----------------
+  // Событие beforeinstallprompt приходит далеко не везде (iPhone,
+  // Яндекс.Браузер, встроенные браузеры мессенджеров), поэтому:
+  //  1) баннер показываем на любом телефоне, если приложение ещё не установлено;
+  //  2) есть постоянная плитка «Поставить на экран телефона» с инструкцией
+  //     под конкретный браузер (js/extras.js → views.install);
+  //  3) если системный диалог доступен — даём кнопку «Установить».
+  const env = window.PL330.env;
   const hint = $('installHint');
-  const isStandalone =
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
-  let dismissed = false;
-  try { dismissed = localStorage.getItem('pl330-install-dismissed') === '1'; } catch (e) { /* приватный режим */ }
+  let hintHidden = false;
+  try { hintHidden = sessionStorage.getItem('pl330-hint-hidden') === '1'; } catch (e) { /* приватный режим */ }
 
-  function dismissHint() {
-    hint.classList.remove('show');
-    hint.innerHTML = '';
-    try { localStorage.setItem('pl330-install-dismissed', '1'); } catch (e) { /* ignore */ }
-  }
-
-  function showHint(html) {
-    hint.innerHTML = html;
-    hint.classList.add('show');
-    const later = hint.querySelector('[data-later]');
-    if (later) later.addEventListener('click', dismissHint);
-  }
-
-  let deferredPrompt = null;
+  window.PL330.deferredPrompt = null;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    deferredPrompt = e;
-    if (isStandalone || dismissed) return;
-    showHint(`
-      <b>Можно поставить инструкцию на экран телефона</b> — как обычное приложение.
-      Тогда она будет открываться одним нажатием и работать без интернета.
-      <div class="row">
-        <button class="btn" type="button" data-install>Установить</button>
-        <button class="btn secondary" type="button" data-later>Не сейчас</button>
-      </div>`);
-    hint.querySelector('[data-install]').addEventListener('click', async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      if (outcome === 'accepted') dismissHint();
-    });
+    window.PL330.deferredPrompt = e;
+    document.dispatchEvent(new CustomEvent('pl330:installable'));
+    renderHint();
   });
-  window.addEventListener('appinstalled', dismissHint);
+  window.addEventListener('appinstalled', () => {
+    window.PL330.deferredPrompt = null;
+    hint.classList.remove('show');
+    hint.innerHTML = '';
+    document.dispatchEvent(new CustomEvent('pl330:installed'));
+  });
 
-  if (isIOS && !isStandalone && !dismissed) {
-    showHint(`
-      <b>Чтобы поставить инструкцию на экран iPhone:</b><br>
-      1. Внизу Safari нажмите кнопку «Поделиться» <span class="key">⎙</span>.<br>
-      2. Выберите <b>«На экран «Домой»»</b>.<br>
-      3. Нажмите <b>«Добавить»</b>.
+  window.PL330.promptInstall = async function () {
+    const p = window.PL330.deferredPrompt;
+    if (!p) return false;
+    p.prompt();
+    const { outcome } = await p.userChoice;
+    window.PL330.deferredPrompt = null;
+    return outcome === 'accepted';
+  };
+
+  function renderHint() {
+    if (env.standalone || hintHidden) return;
+    const canPrompt = !!window.PL330.deferredPrompt;
+    hint.innerHTML = `
+      <div class="install-head"><span aria-hidden="true">📲</span>
+        <b>Эту инструкцию можно поставить на экран телефона</b></div>
+      Она будет открываться одним нажатием, как обычное приложение, и работать без интернета.
       <div class="row">
-        <button class="btn secondary" type="button" data-later>Понятно</button>
-      </div>`);
+        ${canPrompt
+          ? '<button class="btn" type="button" data-install>Установить</button>'
+          : '<button class="btn" type="button" data-howto>Как установить</button>'}
+        <button class="btn secondary" type="button" data-later>Скрыть</button>
+      </div>`;
+    hint.classList.add('show');
+    const inst = hint.querySelector('[data-install]');
+    if (inst) inst.addEventListener('click', async () => { if (await window.PL330.promptInstall()) { hint.classList.remove('show'); } else renderHint(); });
+    const how = hint.querySelector('[data-howto]');
+    if (how) how.addEventListener('click', () => { location.hash = 'install'; });
+    hint.querySelector('[data-later]').addEventListener('click', () => {
+      hintHidden = true;
+      hint.classList.remove('show');
+      hint.innerHTML = '';
+      try { sessionStorage.setItem('pl330-hint-hidden', '1'); } catch (e) { /* ignore */ }
+    });
   }
+  renderHint();
+
 
   // ---------------- Service Worker (офлайн) ----------------
   if ('serviceWorker' in navigator) {
