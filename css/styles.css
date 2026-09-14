@@ -100,6 +100,20 @@ b,strong{font-weight:800;}
   pointer-events:none;
   overflow:visible;
 }
+.waves .halo{
+  position:absolute;
+  left:50%;top:50%;
+  width:100%;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,180,67,0.26) 0%, rgba(255,180,67,0.07) 45%, transparent 68%);
+  animation:breathe 6s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.88);}
+  50%    {opacity:1; transform:translate(-50%,-50%) scale(1);}
+}
 .waves .ring{
   position:absolute;
   left:50%;
@@ -110,15 +124,28 @@ b,strong{font-weight:800;}
   border-radius:50%;
   opacity:0;
   transform:translate(-50%,-50%) scale(0.75);
-  animation:wave 7s ease-out infinite;
+  animation:wave 7.5s ease-out infinite;
   will-change:transform,opacity;
 }
-.waves .ring:nth-child(2){animation-delay:2.3s;}
-.waves .ring:nth-child(3){animation-delay:4.6s;}
+.waves .ring:nth-of-type(2){animation-delay:2.5s;}
+.waves .ring:nth-of-type(3){animation-delay:5s;}
+/* второй слой: тонкие быстрые кольца */
+.waves .ring.thin{
+  width:60%;
+  border-width:1.5px;
+  border-color:var(--amber-soft);
+  animation:wave-thin 4.5s linear infinite;
+}
+.waves .ring.thin:nth-of-type(5){animation-delay:2.25s;}
 @keyframes wave{
   0%  {opacity:0;   transform:translate(-50%,-50%) scale(0.75);}
   12% {opacity:.45;}
   100%{opacity:0;   transform:translate(-50%,-50%) scale(1.55);}
+}
+@keyframes wave-thin{
+  0%  {opacity:0;   transform:translate(-50%,-50%) scale(0.8);}
+  10% {opacity:.3;}
+  100%{opacity:0;   transform:translate(-50%,-50%) scale(1.75);}
 }
 .photo{
   display:block;
@@ -172,7 +199,19 @@ b,strong{font-weight:800;}
   letter-spacing:0.04em;
   font-variant-numeric:tabular-nums;
   text-shadow:0 0 10px rgba(255,180,67,0.45);
-  animation:glow 4s ease-in-out infinite;
+  animation:glow 4s ease-in-out infinite, lcd 11s steps(1,end) infinite;
+}
+/* едва заметное «дыхание» подсветки, как у настоящего LCD */
+@keyframes lcd{
+  0%,100%{opacity:1;}
+  37%{opacity:.9;} 38%{opacity:1;}
+  63%{opacity:.94;} 64%{opacity:1;}
+  81%{opacity:.88;} 82%{opacity:1;}
+}
+.dial{animation:dialglow 8s ease-in-out infinite;}
+@keyframes dialglow{
+  0%,100%{box-shadow:inset 0 0 30px rgba(0,0,0,0.5), 0 0 20px rgba(255,180,67,0.06);}
+  50%    {box-shadow:inset 0 0 30px rgba(0,0,0,0.5), 0 0 34px rgba(255,180,67,0.16);}
 }
 .dial .freq small{
   font-size:1rem;
@@ -244,14 +283,22 @@ b,strong{font-weight:800;}
   cursor:pointer;
   min-height:104px;
   width:100%;
-  transition:transform .12s ease, background .12s ease, border-color .12s ease;
+  box-shadow:0 3px 0 rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.25);
+  transition:transform .1s ease, background .12s ease, border-color .12s ease, box-shadow .1s ease;
 }
 .tile:hover{border-color:rgba(255,180,67,0.45);}
+/* «утапливание» — как нажатие кнопки на приёмнике */
 .tile:active{
-  transform:scale(0.97);
+  transform:translateY(3px) scale(0.985);
   background:var(--panel-2);
   border-color:var(--amber-deep);
+  box-shadow:0 0 0 rgba(0,0,0,0.35), inset 0 3px 10px rgba(0,0,0,0.45);
 }
+.tile-fun{
+  border-color:rgba(255,180,67,0.35);
+  background:linear-gradient(160deg, var(--panel) 0%, #23384A 100%);
+}
+.tile-fun .icon{filter:drop-shadow(0 0 6px rgba(255,180,67,0.5));}
 .tile .icon{font-size:2rem;line-height:1;}
 .tile .label{font-size:1.18rem;font-weight:700;line-height:1.25;}
 
@@ -273,7 +320,8 @@ b,strong{font-weight:800;}
   width:100%;
   margin-bottom:20px;
 }
-.backbtn:active{transform:scale(0.98);}
+.backbtn{transition:transform .1s ease, box-shadow .1s ease;}
+.backbtn:active{transform:translateY(2px) scale(0.99);box-shadow:inset 0 3px 8px rgba(0,0,0,0.4);}
 .backbtn .arrow{font-size:1.5rem;line-height:1;}
 .backbtn.bottom{margin-top:26px;margin-bottom:0;}
 
@@ -395,7 +443,8 @@ b,strong{font-weight:800;}
   background:transparent;
   color:var(--amber);
 }
-.btn:active{transform:scale(0.98);}
+.btn{transition:transform .1s ease, box-shadow .1s ease;}
+.btn:active{transform:translateY(2px) scale(0.99);box-shadow:inset 0 3px 8px rgba(0,0,0,0.3);}
 
 /* ---------- Подвал ---------- */
 footer{
@@ -428,11 +477,273 @@ footer .ver{opacity:.7;font-size:.9rem;}
 .top-link.show{display:block;}
 
 /* ---------- Переходы между экранами ---------- */
-.screen.enter{animation:screenIn .28s ease-out both;}
-@keyframes screenIn{
-  from{opacity:0;transform:translateY(14px);}
+/* вперёд (в тему) — въезд справа, назад (на главную) — слева; симметрично */
+.screen.enter-fwd {animation:screenFwd .32s cubic-bezier(.22,.8,.36,1) both;}
+.screen.enter-back{animation:screenBack .32s cubic-bezier(.22,.8,.36,1) both;}
+@keyframes screenFwd{
+  from{opacity:0;transform:translateX(22px);}
   to  {opacity:1;transform:none;}
 }
+@keyframes screenBack{
+  from{opacity:0;transform:translateX(-22px);}
+  to  {opacity:1;transform:none;}
+}
+/* ступенчатое появление элементов (--i задаёт JS) */
+.screen.enter-fwd .stg,
+.screen.enter-back .stg{
+  animation:fadeUp .45s ease-out both;
+  animation-delay:calc(var(--i, 0) * 55ms + 80ms);
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px);}
+  to  {opacity:1;transform:none;}
+}
+/* появление блока при смене содержимого (викторина, период суток) */
+.pop{animation:popIn .4s ease-out both;}
+@keyframes popIn{
+  from{opacity:0;transform:translateY(8px) scale(.985);}
+  to  {opacity:1;transform:none;}
+}
+
+/* ============================================================
+   Раздел «Интересное»
+   ============================================================ */
+.lead{
+  font-size:1.2rem;
+  color:var(--muted);
+  margin:0 0 18px;
+}
+
+/* --- карточки фактов --- */
+.cards{display:flex;flex-direction:column;gap:14px;}
+.card{
+  background:var(--panel);
+  border:2px solid var(--line);
+  border-left:6px solid var(--amber-deep);
+  border-radius:var(--radius);
+  padding:16px 18px;
+}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.card-icon{font-size:2rem;line-height:1;}
+.card h3{margin:0;font-size:1.25rem;color:var(--amber);line-height:1.25;}
+.card p{margin:0;font-size:1.18rem;line-height:1.55;}
+
+/* --- круг суток --- */
+.clock-wrap{max-width:340px;margin:0 auto 14px;}
+.clock{display:block;width:100%;height:auto;}
+.cface{fill:#0A141C;stroke:#33495C;stroke-width:3;}
+.sector{fill:#223A4D;stroke:var(--bg);stroke-width:3;cursor:pointer;transition:fill .3s ease, filter .3s ease;}
+.sector-morning{fill:#4A5A48;}
+.sector-day{fill:#6B6A3B;}
+.sector-evening{fill:#6A4A3A;}
+.sector-night{fill:#243C55;}
+.sector.active{fill:var(--amber);filter:drop-shadow(0 0 8px rgba(255,180,67,0.6));}
+.sector:hover{filter:brightness(1.2);}
+.ctick{stroke:#5B7891;stroke-width:1.5;}
+.ctick.major{stroke:#8AA4B8;stroke-width:2.5;}
+.cnum{fill:#8AA4B8;font-size:13px;font-weight:700;font-family:inherit;}
+.clabel{font-size:22px;}
+.hand{transform-origin:150px 150px;transition:transform 1.2s cubic-bezier(.34,1.3,.5,1);}
+.hand line{stroke:var(--amber);stroke-width:5;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(255,180,67,0.8));}
+.hand circle{fill:var(--amber);}
+/* медленный «радарный» луч — сутки идут по кругу */
+.sweep{transform-origin:150px 150px;animation:spin 24s linear infinite;}
+.sweep path{fill:rgba(255,180,67,0.14);}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.period-btns{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin:0 0 16px;
+}
+@media (max-width:380px){.period-btns{grid-template-columns:1fr 1fr;}}
+.pbtn{
+  min-height:var(--tap);
+  padding:10px 6px;
+  border-radius:14px;
+  border:2px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+  font-size:1.05rem;
+  font-weight:800;
+  cursor:pointer;
+  transition:transform .1s ease, background .2s ease, border-color .2s ease;
+}
+.pbtn:active{transform:translateY(2px);}
+.pbtn.active{background:var(--amber);color:#12202C;border-color:var(--amber);}
+.period-info{
+  background:var(--panel);
+  border:2px solid rgba(255,180,67,0.35);
+  border-radius:var(--radius);
+  padding:16px 18px;
+}
+.period-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.period-icon{font-size:2.4rem;line-height:1;}
+.period-head h3{margin:0;font-size:1.4rem;color:var(--amber);}
+.period-head h3 small{font-size:1rem;color:var(--muted);font-weight:600;margin-left:6px;}
+.now{
+  display:inline-block;
+  margin-top:4px;
+  background:var(--amber);
+  color:#12202C;
+  font-weight:800;
+  font-size:.95rem;
+  border-radius:20px;
+  padding:2px 12px;
+}
+.bandrow{margin:10px 0;}
+.bandlbl{display:block;font-size:1rem;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.bandlbl.good{color:var(--amber-soft);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:20px;
+  border:2px solid var(--muted);
+  font-size:1.1rem;
+  font-weight:700;
+  background:var(--panel-2);
+}
+.chip.good{border-color:var(--amber-deep);color:var(--amber);background:rgba(255,180,67,0.08);}
+.period-tip{margin:14px 0 0;font-size:1.15rem;line-height:1.5;}
+.period-fm{margin:12px 0 0;font-size:1.05rem;color:var(--muted);}
+
+/* --- комплект --- */
+.kit{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.kit-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:var(--panel);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px 16px;
+  min-height:72px;
+}
+.kit-icon{font-size:2.2rem;line-height:1;flex:0 0 auto;}
+.kit-name{font-size:1.2rem;font-weight:800;}
+.kit-note{font-size:1.05rem;color:var(--muted);}
+.kit-check{margin-left:auto;color:var(--amber);font-size:1.6rem;font-weight:800;}
+
+/* --- что внутри --- */
+.inside-wrap{
+  background:var(--panel);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  padding:12px;
+  margin-bottom:16px;
+}
+.inside{display:block;width:100%;height:auto;}
+.inside .case{fill:rgba(43,68,89,0.35);stroke:#8AA4B8;stroke-width:3;stroke-dasharray:8 6;}
+.inside .part{transition:filter .3s ease, opacity .3s ease;}
+.inside .dot{fill:var(--amber);stroke:#12202C;stroke-width:2;}
+.inside .num{fill:#12202C;font-size:14px;font-weight:800;text-anchor:middle;font-family:inherit;}
+.inside .part.hl{filter:drop-shadow(0 0 8px rgba(255,180,67,0.9));animation:pulse 1.6s ease-in-out infinite;}
+.inside:has(.hl) .part:not(.hl){opacity:.35;}
+@keyframes pulse{
+  0%,100%{filter:drop-shadow(0 0 4px rgba(255,180,67,0.6));}
+  50%    {filter:drop-shadow(0 0 14px rgba(255,180,67,1));}
+}
+.parts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.detail-body ol.parts li{padding-left:0;min-height:0;margin-bottom:0;}
+.detail-body ol.parts li::before{content:none;}
+.part-btn{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  width:100%;
+  text-align:left;
+  background:var(--panel);
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  color:var(--text);
+  font-size:1.12rem;
+  line-height:1.4;
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, transform .1s ease;
+}
+.part-btn:active{transform:translateY(2px);}
+.part-btn.active{border-color:var(--amber);background:var(--panel-2);}
+.part-num{
+  flex:0 0 40px;
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--amber);
+  color:#12202C;
+  font-weight:800;
+  font-size:1.2rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.part-txt b{color:var(--amber-soft);}
+
+/* --- викторина --- */
+.quiz{
+  background:var(--panel);
+  border:2px solid rgba(255,180,67,0.35);
+  border-radius:var(--radius);
+  padding:18px;
+}
+.q-progress{display:flex;gap:6px;margin-bottom:10px;}
+.q-progress span{flex:1;height:8px;border-radius:4px;background:var(--panel-2);transition:background .3s ease;}
+.q-progress span.done{background:var(--amber-deep);}
+.q-progress span.cur{background:var(--amber);animation:glowbar 1.6s ease-in-out infinite;}
+@keyframes glowbar{0%,100%{box-shadow:0 0 0 rgba(255,180,67,0);}50%{box-shadow:0 0 10px rgba(255,180,67,.8);}}
+.q-num{font-size:1rem;color:var(--muted);font-weight:700;}
+.q-text{margin:6px 0 16px;font-size:1.4rem;line-height:1.3;color:var(--amber);}
+.q-answers{display:flex;flex-direction:column;gap:10px;}
+.q-btn{
+  min-height:var(--tap);
+  padding:14px 16px;
+  border-radius:14px;
+  border:2px solid var(--muted);
+  background:var(--panel-2);
+  color:var(--text);
+  font-size:1.2rem;
+  font-weight:700;
+  text-align:left;
+  cursor:pointer;
+  transition:transform .1s ease, background .25s ease, border-color .25s ease;
+}
+.q-btn:not(:disabled):active{transform:translateY(2px);}
+.q-btn:disabled{cursor:default;opacity:.7;}
+.q-btn.right{
+  opacity:1;
+  background:rgba(255,180,67,0.16);
+  border-color:var(--amber);
+  color:var(--amber);
+  animation:rightGlow .7s ease-out;
+}
+.q-btn.right::after{content:" ✓";}
+.q-btn.wrong{
+  opacity:1;
+  border-color:#B86B5E;
+  color:#F2C9C0;
+  animation:shake .45s ease-in-out;
+}
+@keyframes rightGlow{
+  0%  {box-shadow:0 0 0 rgba(255,180,67,0);transform:scale(1);}
+  40% {box-shadow:0 0 22px rgba(255,180,67,.7);transform:scale(1.02);}
+  100%{box-shadow:0 0 0 rgba(255,180,67,0);transform:scale(1);}
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-4px);}
+  75%{transform:translateX(4px);}
+}
+.q-feedback{display:none;margin-top:16px;padding:14px 16px;border-radius:14px;font-size:1.15rem;line-height:1.5;}
+.q-feedback.show{display:block;animation:popIn .4s ease-out both;}
+.q-feedback.ok{background:rgba(255,180,67,0.12);border-left:6px solid var(--amber);}
+.q-feedback.no{background:rgba(184,107,94,0.14);border-left:6px solid #B86B5E;}
+.fb-head{font-weight:800;font-size:1.25rem;margin-bottom:4px;}
+.q-feedback p{margin:0 0 12px;}
+.q-feedback .btn{width:100%;}
+.q-result{text-align:center;padding:10px 0;}
+.q-result-icon{font-size:4rem;line-height:1;animation:bounceIn .8s cubic-bezier(.34,1.4,.5,1) both;}
+@keyframes bounceIn{from{opacity:0;transform:scale(.4);}to{opacity:1;transform:scale(1);}}
+.q-result h3{color:var(--amber);font-size:1.5rem;margin:12px 0 8px;}
+.q-result p{font-size:1.18rem;margin:0 0 18px;}
 
 /* ---------- Уменьшение движения ---------- */
 @media (prefers-reduced-motion: reduce){
@@ -442,5 +753,8 @@ footer .ver{opacity:.7;font-size:.9rem;}
     transition:none !important;
   }
   .waves{display:none;}
-  .dial .freq{text-shadow:0 0 10px rgba(255,180,67,0.45);}
+  .dial .freq{text-shadow:0 0 10px rgba(255,180,67,0.45);opacity:1;}
+  .sweep{display:none;}
+  .inside .part.hl{filter:drop-shadow(0 0 8px rgba(255,180,67,0.9));}
+  .stg,.pop,.q-feedback.show,.q-result-icon{opacity:1;transform:none;}
 }
