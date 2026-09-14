@@ -27,9 +27,10 @@
 
     const grid = document.createElement('div');
     grid.className = 'grid';
+    const shown = Object.values(views).filter((v) => !v.hidden);
     const items = cat.special
-      ? Object.values(views).filter((v) => !v.cat)
-      : [...Object.values(views).filter((v) => v.cat === cat.id), ...topics.filter((t) => t.cat === cat.id)];
+      ? shown.filter((v) => !v.cat)
+      : [...shown.filter((v) => v.cat === cat.id), ...topics.filter((t) => t.cat === cat.id)];
     items.forEach((t) => {
       const btn = document.createElement('button');
       btn.type = 'button';

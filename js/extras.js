@@ -537,25 +537,23 @@
   };
 
   // ============================================================
-  // 7. Второй приёмник — Grundig Concert-Boy Automatic (музейная карточка)
-  //    Фото — собственный снимок владельца. Данные — radiomuseum.org
+  // 7. Второй приёмник — Grundig Concert-Boy Automatic (музейный раздел)
+  //    Фото — собственный снимок владельца. Данные — radiomuseum.org.
+  //    Структура: главная карточка + под-карточки (подсветка, уход, документы).
   // ============================================================
   const cities = ['Moskau', 'Minsk', 'Kiew', 'Warszawa', 'Praha', 'Paris', 'BBC', 'Luxemburg', 'Hilversum', 'Monte Carlo', 'Motala', 'Lahti', 'Kalundborg', 'Deutsche Welle', 'Europa 1', 'Bayer. Rundfunk', 'WDR', 'Bremen', 'Saarbrücken', 'France I'];
-  const gLinks = [
-    { t: 'Схема Concert-Boy N210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_n210_automatic_sch.pdf/download.html' },
-    { t: 'Сервисная документация Concert-Boy 210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_210_automatic.pdf/download.html' },
-    { t: 'Поиск документов по модели на eServiceInfo', u: 'https://www.eserviceinfo.com/index.php?what=search2&searchstring=grundig+concert+boy+n+automatic' },
-    { t: 'Архив инструкций Grundig на mods.dk', u: 'https://www.mods.dk/manual.php?brand=grundig' },
-    { t: 'Карточка модели на Radiomuseum.org (фото, схемы, данные)', u: 'https://www.radiomuseum.org/r/grundig_concert_boy_automatic_n21.html' },
-  ];
 
-  views.grundig = {
-    id: 'grundig', cat: 'museum', tileClass: 'tile-museum', thumb: './assets/grundig-thumb.webp',
-    icon: '📻', title: 'Grundig Concert-Boy Automatic',
-    render() {
-      return `
-      <p class="lead stg">Второй приёмник в доме — винтажный немецкий, на полвека старше Tecsun. Пошаговой инструкции к нему не сохранилось, поэтому это скорее музейная карточка: фото, история, факты и где искать документы.</p>
+  const subTiles = (current) => `
+      <nav class="subtiles stg" aria-label="Карточки раздела Grundig">
+        ${[
+          ['grundig', '📻', 'О приёмнике'],
+          ['grundig-lamp', '💡', 'Не горит подсветка шкалы'],
+          ['grundig-care', '🛠️', 'Уход за старой техникой'],
+          ['grundig-more', '📚', 'Узнать больше и документы'],
+        ].filter(([id]) => id !== current).map(([id, ic, t]) => `<a class="subtile" href="#${id}"><span aria-hidden="true">${ic}</span><span>${t}</span></a>`).join('')}
+      </nav>`;
 
+  const gPhoto = `
       <figure class="photo photo-wide stg">
         <picture>
           <source type="image/webp" srcset="./assets/grundig-480.webp 480w, ./assets/grundig.webp 900w" sizes="(max-width: 640px) 92vw, 600px">
@@ -564,37 +562,56 @@
                alt="Радиоприёмник Grundig Concert-Boy N Automatic: серебристая решётка динамика слева, справа шкала с названиями городов и диапазонами L, M, K1, K2, U, четыре ручки и ручка KW-Lupe">
         </picture>
         <figcaption>Grundig Concert-Boy N Automatic — собственное фото владельца</figcaption>
-      </figure>
+      </figure>`;
 
+  views.grundig = {
+    id: 'grundig', cat: 'museum', tileClass: 'tile-museum', thumb: './assets/grundig-thumb.webp',
+    icon: '📻', title: 'Grundig Concert-Boy Automatic',
+    render() {
+      return `
+      <p class="lead stg">Второй приёмник в доме — винтажный немецкий, на полвека старше Tecsun. Пошаговой инструкции к нему не сохранилось, поэтому это музейная карточка: фото, история, факты, уход и где искать документы.</p>
+      ${gPhoto}
       <div class="badges stg">
         <span class="badge">🇩🇪 Германия, Фюрт</span>
         <span class="badge">📅 1970–1972</span>
         <span class="badge">🔩 12 транзисторов</span>
         <span class="badge">⚖️ 4,3 кг</span>
       </div>
+      ${subTiles('grundig')}
 
       <div class="cards">
         <section class="card stg">
-          <div class="card-head"><span class="card-icon" aria-hidden="true">🏛️</span><h3>История</h3></div>
-          <p>Фирма Grundig из города Фюрт в 1950–70-е годы была одним из главных производителей радио в Европе. Линейка переносных приёмников <b>Concert-Boy</b> («концертный мальчик») выпускалась много лет и была одной из самых популярных: добротный звук, крупная шкала, работа и от сети, и от батареек. Ваш экземпляр — модель <b>Concert-Boy Automatic N210</b>, выпускалась в 1970–1972 годах и стоила тогда 325 немецких марок.</p>
-          <p class="small">Точный номер модели обычно напечатан на табличке на задней крышке — там же указан год.</p>
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🏛️</span><h3>Линейка Concert-Boy</h3></div>
+          <p>Фирма Grundig из города Фюрт в 1950–70-е годы была одним из главных производителей радио в Европе. Переносные приёмники <b>Concert-Boy</b> («концертный мальчик») — одна из самых массовых и узнаваемых серий Западной и Центральной Европы конца 1960-х – 1970-х.</p>
+          <p>Серия выпускалась много лет во множестве версий: <b>200 / 201, 206, 208, 209, N210, 1000, 1100</b> и другие. Отличались они набором диапазонов и оформлением, а общее было одно: добротный звук, крупная шкала и работа и от сети, и от батареек.</p>
+        </section>
+
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🔎</span><h3>Именно ваша модель</h3></div>
+          <p>На табличке спереди — <b>Concert-Boy N Automatic</b>. Это модель <b>N210</b>, выпускалась в 1970–1972 годах и стоила тогда 325 немецких марок. Экспортный вариант с английскими надписями назывался Transistor 1005 Automatic.</p>
+          <ul class="plain">
+            <li><b>Пять диапазонов</b> — кнопки L, M, K1, K2, U над шкалой.</li>
+            <li><b>Шкала с городами</b> вместо частот — типичное решение той эпохи (подробнее ниже).</li>
+            <li><b>Automatic</b> — автоподстройка частоты на УКВ: приёмник сам «держит» станцию, чтобы она не уплывала.</li>
+            <li><b>KW-Lupe</b> — отдельная ручка точной настройки на коротких волнах.</li>
+          </ul>
+          <p class="small">Точный номер модели и год напечатаны на табличке на задней крышке.</p>
         </section>
 
         <section class="card stg">
           <div class="card-head"><span class="card-icon" aria-hidden="true">📡</span><h3>Какие волны принимает</h3></div>
-          <p>Кнопки над шкалой подписаны по-немецки:</p>
           <ul class="plain">
             <li><b>L</b> — длинные волны (Langwelle).</li>
             <li><b>M</b> — средние волны (Mittelwelle).</li>
             <li><b>K1</b> и <b>K2</b> — два участка коротких волн (Kurzwelle).</li>
             <li><b>U</b> — УКВ, то есть обычное FM-радио (Ultrakurzwelle).</li>
           </ul>
-          <p>Маленькая ручка <b>KW-Lupe</b> («лупа для коротких волн») справа — это точная подстройка на КВ, по смыслу то же, что шаг 10 Гц у Tecsun, только механическая. А слово <b>Automatic</b> в названии означает автоподстройку на УКВ: приёмник сам «держит» станцию, чтобы она не уплывала.</p>
+          <p>Ручка <b>KW-Lupe</b> («лупа для коротких волн») — точная подстройка на КВ, по смыслу то же, что шаг 10 Гц у Tecsun, только механическая: крутите её медленно, когда станция уже почти поймана.</p>
         </section>
 
         <section class="card stg">
           <div class="card-head"><span class="card-icon" aria-hidden="true">🗺️</span><h3>Шкала с городами вместо частот</h3></div>
-          <p>На шкале написаны не цифры, а названия городов и радиостанций: так в те годы было принято — слушатель искал не «1548 кГц», а просто «Moskau» или «BBC». На вашем приёмнике можно прочитать:</p>
+          <p>На шкале написаны не цифры, а названия городов и радиостанций: слушатель искал не «1548 кГц», а просто «Moskau» или «BBC». Так в те годы делали почти все европейские заводы — обычному человеку не нужно было знать частоты. На вашем приёмнике можно прочитать:</p>
           <div class="city-strip" aria-hidden="true"><div class="city-track">${cities.concat(cities).map((c) => `<span>${c}</span>`).join('')}</div></div>
           <p class="small">Многие из этих станций давно замолчали, но шкала — маленькая карта радиоэфира Европы 1970 года.</p>
         </section>
@@ -614,7 +631,7 @@
             <li>Размер 36 × 21 × 11 см, вес 4,3 кг — в 20 раз тяжелее Tecsun.</li>
             <li>Большой овальный динамик 17,5 × 11 см, 2 Вт — отсюда «концертный» звук.</li>
             <li>Ферритовая антенна внутри — 18 см (у Tecsun — несколько сантиметров).</li>
-            <li>Экспортный вариант с английскими надписями назывался Transistor 1005 Automatic.</li>
+            <li>12 транзисторов, 7 контуров на AM и 10 на УКВ.</li>
           </ul>
         </section>
 
@@ -628,23 +645,180 @@
           </div>
           <p class="small">Полвека разницы — а слушают они один и тот же эфир.</p>
         </section>
+      </div>
+      ${subTiles('grundig')}`;
+    },
+  };
+
+  // --- Подсветка шкалы: что купить (собственная SVG-иллюстрация, без чужих фото) ---
+  const lampSvg = `
+      <svg class="lamp-pic" viewBox="0 0 400 244" role="img" aria-label="Слева — лампа накаливания с цоколем E10 и нитью накала, светит тускло. Справа — светодиодная лампа-замена с таким же цоколем, светит ярче">
+        <defs>
+          <radialGradient id="glowDim" cx="50%" cy="45%" r="50%"><stop offset="0" stop-color="#FFB443" stop-opacity=".35"/><stop offset="1" stop-color="#FFB443" stop-opacity="0"/></radialGradient>
+          <radialGradient id="glowLed" cx="50%" cy="45%" r="50%"><stop offset="0" stop-color="#FFB443" stop-opacity=".85"/><stop offset="1" stop-color="#FFB443" stop-opacity="0"/></radialGradient>
+          <linearGradient id="brass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8A6D3B"/><stop offset=".5" stop-color="#D9B36A"/><stop offset="1" stop-color="#8A6D3B"/></linearGradient>
+        </defs>
+        <!-- лампа накаливания -->
+        <g class="lamp-old">
+          <circle cx="110" cy="95" r="80" fill="url(#glowDim)" class="lamp-glow-dim"/>
+          <ellipse cx="110" cy="80" rx="34" ry="42" fill="#0E1A24" stroke="#C9D6E2" stroke-width="3" opacity=".95"/>
+          <ellipse cx="110" cy="80" rx="34" ry="42" fill="rgba(255,180,67,0.10)"/>
+          <path d="M100 118 L100 92 L106 82 L110 94 L114 82 L120 92 L120 118" fill="none" stroke="#FFB443" stroke-width="2.5" stroke-linecap="round" class="filament"/>
+          <rect x="94" y="118" width="32" height="10" fill="#4A5A66"/>
+          <rect x="92" y="128" width="36" height="44" rx="3" fill="url(#brass)"/>
+          <g stroke="#5A4A2B" stroke-width="2"><line x1="92" y1="138" x2="128" y2="142"/><line x1="92" y1="148" x2="128" y2="152"/><line x1="92" y1="158" x2="128" y2="162"/></g>
+          <rect x="102" y="172" width="16" height="8" rx="2" fill="#3A3A3A"/>
+          <text x="110" y="205" text-anchor="middle" class="lamp-cap">Было — тускло</text>
+          <text x="110" y="236" text-anchor="middle" class="lamp-sub">лампа накаливания, E10</text>
+        </g>
+        <!-- светодиодная замена -->
+        <g class="lamp-new">
+          <circle cx="290" cy="90" r="95" fill="url(#glowLed)" class="lamp-glow-led"/>
+          <path d="M262 118 L262 84 A28 28 0 0 1 318 84 L318 118 Z" fill="#FFC96B" stroke="#FFE2AE" stroke-width="3" opacity=".95"/>
+          <g fill="#FFF3D6"><rect x="279" y="92" width="8" height="8" rx="1"/><rect x="293" y="92" width="8" height="8" rx="1"/><rect x="286" y="104" width="8" height="8" rx="1"/></g>
+          <rect x="274" y="118" width="32" height="10" fill="#4A5A66"/>
+          <rect x="272" y="128" width="36" height="44" rx="3" fill="url(#brass)"/>
+          <g stroke="#5A4A2B" stroke-width="2"><line x1="272" y1="138" x2="308" y2="142"/><line x1="272" y1="148" x2="308" y2="152"/><line x1="272" y1="158" x2="308" y2="162"/></g>
+          <rect x="282" y="172" width="16" height="8" rx="2" fill="#3A3A3A"/>
+          <text x="290" y="205" text-anchor="middle" class="lamp-cap">Стало — ярче</text>
+          <text x="290" y="222" text-anchor="middle" class="lamp-cap">и служит дольше</text>
+          <text x="290" y="236" text-anchor="middle" class="lamp-sub">светодиодная лампа-замена, E10</text>
+        </g>
+        <text x="200" y="130" text-anchor="middle" class="lamp-arrow">→</text>
+      </svg>`;
+
+  const shops = [
+    { name: 'Reichelt Elektronik', url: 'https://www.reichelt.de/', hint: 'искать «Skalenlampe E10» или «Kugellampe 6V»' },
+    { name: 'Conrad Electronic', url: 'https://www.conrad.de/', hint: 'искать «Skalenbeleuchtung» или «Glühlampe 6V 80mA»; есть сайты conrad.at, conrad.nl и другие' },
+    { name: 'Bürklin Elektronik', url: 'https://www.buerklin.com/', hint: 'реставраторы называли артикул 33G131 (лампа 6–7 В / 80 мА) — актуальность нужно проверить, тема старая' },
+  ];
+
+  views['grundig-lamp'] = {
+    id: 'grundig-lamp', cat: 'museum', tileClass: 'tile-lamp', icon: '💡', title: 'Не горит подсветка шкалы — что купить',
+    render() {
+      return `
+      <p class="lead stg">На Grundig Concert-Boy погасла подсветка шкалы. Это почти всегда просто перегоревшая лампочка, и её можно заменить. Ниже — какая лампа стояла, где взять и почему лучше поставить светодиод.</p>
+      <div class="lamp-wrap stg">${lampSvg}</div>
+
+      <div class="cards">
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🔦</span><h3>Какая лампа стояла изначально</h3></div>
+          <ul class="plain">
+            <li>В этой линейке (Concert-Boy 209 / N210 и похожих) шкалу подсвечивала маленькая <b>лампа накаливания на 6–8 В, около 80 мА</b> (примерно 0,5 Вт).</li>
+            <li>Цоколь бывает двух видов — зависит от года и версии:<br>
+              — <b>вставной стеклянный</b>, без резьбы, как в старых автомобильных приборных панелях (по-немецки Glassockel / Stecksockel);<br>
+              — <b>маленький резьбовой E10</b>, как в ёлочной гирлянде.</li>
+            <li><b>Прежде чем заказывать</b> — снимите заднюю крышку и посмотрите на саму лампочку и патрон: там либо сохранилась маркировка (вольты и миллиамперы), либо хотя бы понятен тип цоколя.</li>
+          </ul>
+          <div class="note warn">⚠️ <b>Безопасность.</b> Перед тем как открывать крышку, <b>выключите приёмник и выньте вилку из розетки</b>. Внутри — старая сетевая техника на 220 В. Если нет уверенности в электронике, лучше доверить замену мастеру по ремонту старой радиотехники.</div>
+        </section>
 
         <section class="card stg">
-          <div class="card-head"><span class="card-icon" aria-hidden="true">🛠️</span><h3>Если захотите его оживить</h3></div>
+          <div class="card-head"><span class="card-icon" aria-hidden="true">✨</span><h3>Почему лучше сразу поставить светодиод</h3></div>
           <ul class="plain">
-            <li>Не включайте в сеть сразу после долгого хранения: у старых конденсаторов внутри со временем «высыхает» начинка, и они могут выйти из строя с хлопком. Пусть сначала посмотрит мастер.</li>
-            <li>Загляните в отсек батареек: старые батарейки часто текут и разъедают контакты — их нужно почистить.</li>
-            <li>Треск при повороте ручек — обычное дело для такого возраста, лечится чисткой переменных резисторов.</li>
-            <li>Такие приёмники охотно чинят и коллекционируют — запчасти и схемы найти можно (ссылки ниже).</li>
+            <li>Родные лампы накаливания в этих приёмниках светят довольно <b>тускло</b> — это особенность конструкции, а не поломка. Многие владельцы специально переходят на светодиоды, чтобы шкала была видна чётче, особенно вечером.</li>
+            <li>Светодиод почти не греется и служит в десятки раз дольше.</li>
+            <li><b>Самый простой вариант без пайки</b> — готовая <b>светодиодная лампа-замена с цоколем E10</b>, рассчитанная на <b>6–12 В переменного/постоянного тока</b>, с резистором уже внутри цоколя. Просто вкручивается вместо старой — ничего паять не нужно.</li>
+            <li><b>Цвет:</b> чтобы было похоже на оригинал — <b>тёплый белый</b> (warm white, 2700–3000 K). Хочется классического «янтарного» свечения, как у радио той эпохи, — <b>amber</b> (янтарный/жёлтый).</li>
+            <li>Если попался «голый» светодиод на проводах без резистора — он <b>не подходит</b> без пайки. Берите именно готовую лампу с цоколем E10 и резистором внутри.</li>
           </ul>
+          <p><b>Как искать:</b></p>
+          <ul class="plain">
+            <li>«<b>E10 LED bulb 6V 12V AC/DC replacement</b>» — на eBay, Amazon (.de, .fr, .it и др.).</li>
+            <li>«<b>E10 LED Ersatzlampe 6V warmweiß</b>» — по-немецки, так проще найти у продавцов запчастей для винтажной техники.</li>
+          </ul>
+          <div class="note">Если цоколь у вас вставной стеклянный, а не E10, — ищите «LED Stecksockel» либо возьмите обычную лампу-аналог из магазинов ниже и попросите мастера подобрать замену.</div>
         </section>
 
         <section class="card stg links-card">
-          <div class="card-head"><span class="card-icon" aria-hidden="true">📚</span><h3>Дополнительные материалы</h3></div>
-          <p>Это старые технические документы на немецком языке для мастеров по ремонту — схемы и сервисные описания. Полной понятной инструкции на русском для этой модели, к сожалению, не сохранилось: аппарат слишком старый. Для открытия ссылок нужен интернет.</p>
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🛒</span><h3>Где купить лампу-аналог (доставка по Европе)</h3></div>
+          <p>Что написать в поиске магазина — подсказано под каждой кнопкой. Для открытия ссылок нужен интернет.</p>
+          <ul class="links">${shops.map((sh) => `<li><a href="${sh.url}" target="_blank" rel="noopener noreferrer"><b>${esc(sh.name)}</b> — открыть магазин <span aria-hidden="true">↗</span><small>${esc(sh.hint)}</small></a></li>`).join('')}</ul>
+        </section>
+      </div>
+      ${subTiles('grundig-lamp')}`;
+    },
+  };
+
+  // --- Уход за старой техникой ---
+  views['grundig-care'] = {
+    id: 'grundig-care', hidden: true, icon: '🛠️', title: 'Уход за старой техникой',
+    render() {
+      return `
+      <p class="lead stg">Приёмнику больше пятидесяти лет. Ему не нужно ничего сложного — только немного внимания, и он проработает ещё долго.</p>
+      <div class="cards">
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🔌</span><h3>Перед первым включением после долгого хранения</h3></div>
+          <ul class="plain">
+            <li>Не включайте в сеть сразу. У старых конденсаторов внутри со временем «высыхает» начинка — при включении они могут выйти из строя, иногда с хлопком и дымком.</li>
+            <li>Лучше сначала показать приёмник мастеру: он проверит и при необходимости заменит несколько деталей — это недорого и обычно делается за один визит.</li>
+            <li>Если всё же включаете сами — сначала от <b>батареек</b>, не от сети: так безопаснее.</li>
+          </ul>
+        </section>
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🔋</span><h3>Батарейки</h3></div>
+          <ul class="plain">
+            <li>Старые батарейки часто <b>текут</b> и разъедают контакты. Если приёмник долго стоял — загляните в отсек и почистите контакты (сухой тряпочкой или ластиком).</li>
+            <li>Для длительного хранения батарейки <b>вынимайте</b>.</li>
+            <li>Нужны шесть штук по 1,5 В крупного размера (в магазинах — «D» или «R20»).</li>
+          </ul>
+        </section>
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🎚️</span><h3>Треск, шорох, пропадающий звук</h3></div>
+          <ul class="plain">
+            <li>Треск при повороте ручки громкости — окислился переменный резистор. Обычное дело для такого возраста; мастер чистит его специальным аэрозолем за пять минут.</li>
+            <li>Звук пропадает при нажатии кнопок диапазонов — окислились контакты переключателей. Лечится так же.</li>
+            <li>Несколько раз в год просто включайте приёмник на полчаса и покрутите все ручки и понажимайте кнопки — это лучшая профилактика окисления.</li>
+          </ul>
+        </section>
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🧴</span><h3>Корпус и шкала</h3></div>
+          <ul class="plain">
+            <li>Пластик и хром протирайте слегка влажной мягкой тряпочкой. Никакого спирта и растворителей — надписи на шкале могут стереться.</li>
+            <li>Не ставьте на солнце и рядом с батареей отопления: пластик желтеет, а тросик шкалы растягивается.</li>
+            <li>Хранить лучше в сухом месте при комнатной температуре, антенну — сложенной.</li>
+          </ul>
+        </section>
+        <section class="card stg">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">🧭</span><h3>Что внутри — простыми словами</h3></div>
+          <p>Внутри нет ламп — только транзисторы, поэтому греется он совсем немного. Большая ферритовая антенна для средних и длинных волн, катушки и конденсаторы для настройки, тросик со стрелкой шкалы, большой овальный динамик и блок питания от сети. Всё это ремонтопригодно, и такие приёмники охотно чинят — запчасти и схемы есть (см. «Узнать больше и документы»).</p>
+        </section>
+      </div>
+      ${subTiles('grundig-care')}`;
+    },
+  };
+
+  // --- Узнать больше и документы ---
+  const gForums = [
+    { t: 'Dampfradioforum — обсуждение и ремонт Concert-Boy', u: 'https://www.dampfradioforum.de/viewtopic.php?f=69&t=26585' },
+    { t: 'Wumpus-Gollum-Forum — тема про Concert-Boy', u: 'https://wumpus-gollum-forum.de/forum/thread.php?board=2&thread=862' },
+    { t: 'Radiomuseum.org — форум: чем заменить лампы шкалы', u: 'https://www.radiomuseum.org/forum/ersatz_fuer_skalenlampen_4_v_03_a.html' },
+  ];
+  const gLinks = [
+    { t: 'Схема Concert-Boy N210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_n210_automatic_sch.pdf/download.html' },
+    { t: 'Сервисная документация Concert-Boy 210 Automatic (PDF)', u: 'https://elektrotanya.com/grundig_concert-boy_210_automatic.pdf/download.html' },
+    { t: 'Поиск документов по модели на eServiceInfo', u: 'https://www.eserviceinfo.com/index.php?what=search2&searchstring=grundig+concert+boy+n+automatic' },
+    { t: 'Архив инструкций Grundig на mods.dk', u: 'https://www.mods.dk/manual.php?brand=grundig' },
+    { t: 'Карточка модели на Radiomuseum.org (фото, схемы, данные)', u: 'https://www.radiomuseum.org/r/grundig_concert_boy_automatic_n21.html' },
+  ];
+  views['grundig-more'] = {
+    id: 'grundig-more', hidden: true, icon: '📚', title: 'Узнать больше и документы',
+    render() {
+      return `
+      <p class="lead stg">Для тех, кто захочет копнуть глубже: почитать, как эту же модель чинили другие люди, и найти схемы. Для открытия ссылок нужен интернет.</p>
+      <div class="cards">
+        <section class="card stg links-card">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">💬</span><h3>Хочется узнать больше</h3></div>
+          <p>Форумы реставраторов старой радиотехники, где обсуждали и чинили именно эту модель. На немецком, но переводчик в браузере справляется.</p>
+          <ul class="links">${gForums.map((l) => `<li><a href="${l.u}" target="_blank" rel="noopener noreferrer">${esc(l.t)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul>
+        </section>
+        <section class="card stg links-card">
+          <div class="card-head"><span class="card-icon" aria-hidden="true">📄</span><h3>Схемы и сервисные документы</h3></div>
+          <p>Это старые технические документы на немецком языке для мастеров по ремонту. Полной понятной инструкции на русском для этой модели, к сожалению, не сохранилось — аппарат слишком старый. Это историческая и техническая справка, а не пошаговая инструкция, как для Tecsun.</p>
           <ul class="links">${gLinks.map((l) => `<li><a href="${l.u}" target="_blank" rel="noopener noreferrer">${esc(l.t)} <span aria-hidden="true">↗</span></a></li>`).join('')}</ul>
         </section>
-      </div>`;
+      </div>
+      ${subTiles('grundig-more')}`;
     },
   };
 })();
