@@ -2,7 +2,7 @@
    Стратегия: cache-first для всего app shell. При смене VERSION старый
    кэш удаляется на этапе activate. */
 
-const VERSION = 'v2.1.0';
+const VERSION = 'v2.2.0';
 const CACHE = `pl330-guide-${VERSION}`;
 
 const APP_SHELL = [

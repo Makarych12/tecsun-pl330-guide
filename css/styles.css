@@ -252,14 +252,57 @@ h1,h2,h3{overflow-wrap:anywhere;}
   stroke-width:3;
   stroke-linecap:round;
   filter:drop-shadow(0 0 4px rgba(255,180,67,0.8));
-  animation:needle 18s ease-in-out infinite alternate;
+  animation:needle 14s ease-in-out infinite;
   transform-box:fill-box;
 }
+/* стрелка «ищет» станцию вокруг 14.150 — как при точной настройке в SSB */
 @keyframes needle{
-  0%  {transform:translateX(0);}
-  35% {transform:translateX(120px);}
-  60% {transform:translateX(90px);}
-  100%{transform:translateX(290px);}
+  0%  {transform:translateX(137px);}
+  20% {transform:translateX(112px);}
+  45% {transform:translateX(158px);}
+  65% {transform:translateX(130px);}
+  85% {transform:translateX(141px);}
+  100%{transform:translateX(137px);}
+}
+.dial .band .mode{
+  display:inline-block;
+  background:var(--amber);
+  color:#12202C;
+  font-weight:800;
+  font-size:.85rem;
+  border-radius:6px;
+  padding:1px 7px;
+  margin-right:6px;
+  letter-spacing:.04em;
+  vertical-align:middle;
+}
+.dial-meta{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:6px;
+  font-size:.85rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  color:var(--amber-soft);
+  opacity:.85;
+}
+.dial-meta .sig{display:inline-flex;align-items:flex-end;gap:2px;margin-left:auto;height:14px;}
+.dial-meta .sig i{display:block;width:5px;background:var(--amber);border-radius:1px;animation:sig 5s ease-in-out infinite;}
+.dial-meta .sig i:nth-child(1){height:4px;}
+.dial-meta .sig i:nth-child(2){height:6px;animation-delay:.3s;}
+.dial-meta .sig i:nth-child(3){height:9px;animation-delay:.6s;}
+.dial-meta .sig i:nth-child(4){height:11px;animation-delay:.9s;opacity:.55;}
+.dial-meta .sig i:nth-child(5){height:14px;animation-delay:1.2s;opacity:.3;}
+@keyframes sig{
+  0%,100%{opacity:1;}
+  50%{opacity:.35;}
+}
+.dial-meta .sig i:nth-child(4){animation-name:sigw;}
+.dial-meta .sig i:nth-child(5){animation-name:sigw;}
+@keyframes sigw{
+  0%,100%{opacity:.25;}
+  50%{opacity:.8;}
 }
 
 /* ---------- Список тем ---------- */

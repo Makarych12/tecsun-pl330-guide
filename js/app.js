@@ -42,12 +42,14 @@
   });
 
   // ---------------- Шкала на декоративном дисплее ----------------
+  // 20-метровый любительский диапазон: 14.000–14.350 МГц, деление 25 кГц
   (function buildScale() {
     const g = $('ticks');
     if (!g) return;
     const ns = 'http://www.w3.org/2000/svg';
-    for (let i = 0; i <= 20; i++) {
-      const x = 20 + i * 16;
+    const N = 14, stepX = 320 / N;
+    for (let i = 0; i <= N; i++) {
+      const x = 20 + i * stepX;
       const major = i % 4 === 0;
       const line = document.createElementNS(ns, 'line');
       line.setAttribute('x1', x); line.setAttribute('x2', x);
@@ -59,7 +61,7 @@
         t.setAttribute('x', x); t.setAttribute('y', 38);
         t.setAttribute('text-anchor', 'middle');
         t.setAttribute('class', 'num');
-        t.textContent = 88 + i;
+        t.textContent = (14 + i * 0.025).toFixed(2);
         g.appendChild(t);
       }
     }
